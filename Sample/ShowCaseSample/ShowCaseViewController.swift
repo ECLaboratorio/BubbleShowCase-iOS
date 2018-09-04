@@ -55,7 +55,7 @@ class ShowCaseViewController: UIViewController {
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		
-		let showCaseOnView = ShowCase(target: startDemoButton, arrowDirection: .down, label: "startDemoButton")
+		let showCaseOnView = BubbleShowCase(target: startDemoButton, arrowDirection: .down, label: "startDemoButton")
 		showCaseOnView.titleText = "Tap here to close it"
 		showCaseOnView.descriptionText = "You will start the demo"
 		showCaseOnView.arrowDirection = .right
@@ -68,32 +68,32 @@ class ShowCaseViewController: UIViewController {
 	
 	@IBAction func startDemoDidTap(_ sender: UIButton) {
 
-		let showCaseOnTabBar = ShowCase(tabBar: tabBarController!.tabBar, index: 8, label: "tabBar")
+		let showCaseOnTabBar = BubbleShowCase(tabBar: tabBarController!.tabBar, index: 8, label: "tabBar")
 		showCaseOnTabBar.titleText = "In a tabBar!"
 		showCaseOnTabBar.descriptionText = "It doesn't matter wether the item is hidden"
 		showCaseOnTabBar.color = UIColor(red: 196.0/255.0, green: 249.0/255.0, blue: 212.0/255.0, alpha: 1.0)
 		showCaseOnTabBar.textColor = UIColor.darkGray
 		showCaseOnTabBar.delegate = self
 		
-		let showCaseOnNavBar = ShowCase(target: navigationItem.rightBarButtonItem!, label: "barButtonItem")!
+		let showCaseOnNavBar = BubbleShowCase(target: navigationItem.rightBarButtonItem!, label: "barButtonItem")!
 		showCaseOnNavBar.titleText = "Watch out!"
 		showCaseOnNavBar.descriptionText = "Bar buttons must be custom so that the show case works"
-		showCaseOnTabBar.concat(showCase: showCaseOnNavBar)
+		showCaseOnTabBar.concat(bubbleShowCase: showCaseOnNavBar)
 		showCaseOnNavBar.color = UIColor(red: 255.0/255.0, green: 26.0/255.0, blue: 114.0/255.0, alpha: 1.0)
 		showCaseOnNavBar.shadowColor = UIColor.blue
 		showCaseOnNavBar.textColor = UIColor.white
 		
-		let showCaseOnRootView = ShowCase(target: view, arrowDirection: .upAndDown, label: "rootView")
+		let showCaseOnRootView = BubbleShowCase(target: view, arrowDirection: .upAndDown, label: "rootView")
 		showCaseOnRootView.titleText = "Lots of directions"
 		showCaseOnRootView.delegate = self
 		showCaseOnRootView.image = UIImage(named: "show-case-swipe")
 		showCaseOnRootView.descriptionText = "-Double directions are placed in the center of the screen \n-You can add images too \n-Show a cross to dismiss it or choose to force the user to react to the target"
-		showCaseOnNavBar.concat(showCase: showCaseOnRootView)
+		showCaseOnNavBar.concat(bubbleShowCase: showCaseOnRootView)
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) { [weak self] in
 			guard let `self` = self else { return }
 			if let cell = self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) {
-				let showCaseOnCell = ShowCase(cell: cell, target: nil, arrowDirection: .down, label: "cellIndex4")
+				let showCaseOnCell = BubbleShowCase(cell: cell, target: nil, arrowDirection: .down, label: "cellIndex4")
 				showCaseOnCell.titleText = "Hey, what about me?"
 				showCaseOnCell.descriptionText = "ShowCase works also for both UITableView and UICollectionView"
 				showCaseOnCell.delegate = self
@@ -110,17 +110,18 @@ class ShowCaseViewController: UIViewController {
 	
 }
 
-extension ShowCaseViewController: ShowCaseDelegate {
+extension ShowCaseViewController: BubbleShowCaseDelegate {
 
-	func showCase(_ showCase: ShowCase, didTap target: UIView!, gestureRecognizer: UITapGestureRecognizer) {
-		if showCase.label == "startDemoButton" {
-			showSimpleAlert(title: "Hey!", message: "You can react to certain gestures. See ShowCaseDelegate for more information.") { [weak self] in
-				guard let `self` = self else { return }
-				self.startDemoDidTap(self.startDemoButton)
-			}
-			
-			showCase.dimiss()
+	func bubbleShowCase(_ bubbleShowCase: BubbleShowCase, didTap target: UIView!, gestureRecognizer: UITapGestureRecognizer) {
+		guard let showCaseLabel = bubbleShowCase.label else { return }
+		guard showCaseLabel == "startDemoButton" else { return }
+		
+		showSimpleAlert(title: "Hey!", message: "You can react to certain gestures. See ShowCaseDelegate for more information.") { [weak self] in
+			guard let `self` = self else { return }
+			self.startDemoDidTap(self.startDemoButton)
 		}
+		
+		bubbleShowCase.dimiss()
 	}
 	
 }
@@ -153,7 +154,7 @@ extension ShowCaseViewController: UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		if indexPath.row == 12, !isCellShowCaseShown {
-			let showCaseOnCell = ShowCase(cell: cell, target: nil, arrowDirection: .down, label: "cellIndex12")
+			let showCaseOnCell = BubbleShowCase(cell: cell, target: nil, arrowDirection: .down, label: "cellIndex12")
 			showCaseOnCell.titleText = "Am I not in the screen?"
 			showCaseOnCell.descriptionText = "I'll stop the scroll and make sure the cell displays"
 			showCaseOnCell.delegate = self

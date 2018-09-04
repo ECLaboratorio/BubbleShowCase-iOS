@@ -9,42 +9,42 @@
 import UIKit
 
 /**
-The delegate of ShowCase must adopt the ShowCaseDelegate protocol. Optional methods let the delegate know when the show case appears and dismisses and when some of the most common gestures are recognized by the target.
+The delegate of BubbleShowCase must adopt the BubbleShowCaseDelegate protocol. Optional methods let the delegate know when the show case appears and dismisses and when some of the most common gestures are recognized by the target.
 */
-@objc public protocol ShowCaseDelegate: class {
+@objc public protocol BubbleShowCaseDelegate: class {
 	
 	/// Tells the delegate the show case is going to appear into the screen
-	@objc optional func showCaseWillTransitionIntoScreen(_ showCase: ShowCase)
+	@objc optional func bubbleShowCaseWillTransitionIntoScreen(_ bubbleShowCase: BubbleShowCase)
 	
 	/// Tells the delegate appeared into the screen
-	@objc optional func showCaseDidTransitionIntoScreen(_ showCase: ShowCase)
+	@objc optional func bubbleShowCaseDidTransitionIntoScreen(_ bubbleShowCase: BubbleShowCase)
 	
 	/// Tells the delegate the show case is going to be removed from the screen
-	@objc optional func showCaseWillDismiss(_ showCase: ShowCase)
+	@objc optional func bubbleShowCaseWillDismiss(_ bubbleShowCase: BubbleShowCase)
 	
 	/// Tells the delegate the show case was removed from the screen
-	@objc optional func showCaseDidDismiss(_ showCase: ShowCase)
+	@objc optional func bubbleShowCaseDidDismiss(_ bubbleShowCase: BubbleShowCase)
 	
 	/// Tells the delegate the target was tapped
-	@objc optional func showCase(_ showCase: ShowCase, didTap target: UIView!, gestureRecognizer: UITapGestureRecognizer)
+	@objc optional func bubbleShowCase(_ bubbleShowCase: BubbleShowCase, didTap target: UIView!, gestureRecognizer: UITapGestureRecognizer)
 	
 	/// Tells the delegate the target was double tapped
-	@objc optional func showCase(_ showCase: ShowCase, didDoubleTap target: UIView!, gestureRecognizer: UITapGestureRecognizer)
+	@objc optional func bubbleShowCase(_ bubbleShowCase: BubbleShowCase, didDoubleTap target: UIView!, gestureRecognizer: UITapGestureRecognizer)
 	
 	/// Tells the delegate the target was swiped leftwards
-	@objc optional func showCase(_ showCase: ShowCase, didSwipeLeft target: UIView!, gestureRecognizer: UISwipeGestureRecognizer)
+	@objc optional func bubbleShowCase(_ bubbleShowCase: BubbleShowCase, didSwipeLeft target: UIView!, gestureRecognizer: UISwipeGestureRecognizer)
 	
 	/// Tells the delegate the target was swiped rightwards
-	@objc optional func showCase(_ showCase: ShowCase, didSwipeRight target: UIView!, gestureRecognizer: UISwipeGestureRecognizer)
+	@objc optional func bubbleShowCase(_ bubbleShowCase: BubbleShowCase, didSwipeRight target: UIView!, gestureRecognizer: UISwipeGestureRecognizer)
 	
 	/// Tells the delegate the target was swiped upwards
-	@objc optional func showCase(_ showCase: ShowCase, didSwipeUp target: UIView!, gestureRecognizer: UISwipeGestureRecognizer)
+	@objc optional func bubbleShowCase(_ bubbleShowCase: BubbleShowCase, didSwipeUp target: UIView!, gestureRecognizer: UISwipeGestureRecognizer)
 	
 	/// Tells the delegate the target was swiped downwards
-	@objc optional func showCase(_ showCase: ShowCase, didSwipeDown target: UIView!, gestureRecognizer: UISwipeGestureRecognizer)
+	@objc optional func bubbleShowCase(_ bubbleShowCase: BubbleShowCase, didSwipeDown target: UIView!, gestureRecognizer: UISwipeGestureRecognizer)
 	
 	/// Tells the delegate the target was long pressed
-	@objc optional func showCase(_ showCase: ShowCase, didLongPress target: UIView!, gestureRecognizer: UILongPressGestureRecognizer)
+	@objc optional func bubbleShowCase(_ bubbleShowCase: BubbleShowCase, didLongPress target: UIView!, gestureRecognizer: UILongPressGestureRecognizer)
 }
 
 /**
@@ -54,7 +54,7 @@ This so called show case obscurs the scene, pops up above any other view in the 
 # Example #
 ````
 ...
-let showCase = ShowCase(target: myBarButton, label: "BarButtonShowCase")
+let showCase = BubbleShowCaseShow(target: myBarButton, label: "BarButtonShowCase")
 showCase.titleText = "You know what?"
 showCase.descriptionText = "You can do amazing things if you tap on this navbar button"
 showCase.image = UIImage(named: "show-case-bar-button")
@@ -65,7 +65,7 @@ showCase.show()
 ````
 
 */
-public class ShowCase: UIView {
+public class BubbleShowCase: UIView {
 	
 	/**
 	It indicates the direction the show case should point to. There are 6 options:
@@ -162,7 +162,7 @@ public class ShowCase: UIView {
 	public var isCrossDismissable = true { didSet { cross?.isHidden = !isCrossDismissable } }
 	
 	/// The object that acts as the delegate of a Show Case. The delegate is not retained and is therefore qualified as *weak*.
-	public weak var delegate: ShowCaseDelegate?
+	public weak var delegate: BubbleShowCaseDelegate?
 	
 	/**
 	Direction of the arrow the show case points to. There are 6 possible values.
@@ -207,14 +207,14 @@ public class ShowCase: UIView {
 	private var screenWindow: UIWindow { return UIApplication.shared.keyWindow! }
 	
 	/******************* ID ***********************/
-	private(set) var label: String?
+	public private(set) var label: String?
 	
 	/***************** LAYERS *********************/
 	private var crossLayer: CAShapeLayer?
 	private var arrowLayers: [CAShapeLayer]?
 	
 	/***************** CONCAT *********************/
-	fileprivate var nextShowCase: ShowCase?
+	fileprivate var nextShowCase: BubbleShowCase?
 	
 	//MARK: Initializers
 	
@@ -334,7 +334,7 @@ public class ShowCase: UIView {
 	//MARK: Public Methods
 	
 	/// Dismisses the show case out of the screen with an animation.
-	public func dimiss() {
+	public func dismiss() {
 		animateDisappearance()
 	}
 	
@@ -350,13 +350,13 @@ public class ShowCase: UIView {
 	}
 	
 	/// Call this method to concat a show case. It will be automatically displayed after this is completed.
-	public func concat(showCase: ShowCase) {
-		self.nextShowCase = showCase
+	public func concat(bubbleShowCase: BubbleShowCase) {
+		self.nextShowCase = bubbleShowCase
 	}
 	
 	/// Displays the show case after the one passed as argument has finished.
-	public func show(after showCase: ShowCase) {
-		showCase.nextShowCase = self
+	public func show(after bubbleShowCase: BubbleShowCase) {
+		bubbleShowCase.nextShowCase = self
 	}
 	
 	//MARK: Override
@@ -460,20 +460,20 @@ public class ShowCase: UIView {
 	
 	// Animates the appearance of both the show case and its subviews
 	private func animateDisappearance() {
-		delegate?.showCaseWillDismiss?(self)
+		delegate?.bubbleShowCaseWillDismiss?(self)
 		nextShowCase?.show()
 		UIView.animate(withDuration: 0.4, animations: { [weak self] in
 			self?.alpha = 0
 			}, completion: { [weak self] _ in
 				guard let `self` = self else { return }
-				self.delegate?.showCaseDidDismiss?(self)
+				self.delegate?.bubbleShowCaseDidDismiss?(self)
 				self.removeFromSuperview()
 		})
 	}
 	
 	// Animates the removal of the show case out of the screen
 	private func animateAppearance() {
-		delegate?.showCaseWillTransitionIntoScreen?(self)
+		delegate?.bubbleShowCaseWillTransitionIntoScreen?(self)
 		alpha = 0
 		bubble.alpha = 0
 		screenshotContainer?.alpha = 0
@@ -490,7 +490,7 @@ public class ShowCase: UIView {
 					self?.bubble.transform = .identity
 					}, completion: { [weak self] _ in
 						guard let `self` = self else { return }
-						self.delegate?.showCaseDidTransitionIntoScreen?(self)
+						self.delegate?.bubbleShowCaseDidTransitionIntoScreen?(self)
 						UIView.animate(withDuration: 0.4, delay: 0, options: [.autoreverse, .repeat, .allowUserInteraction], animations: { [weak self] in
 							self?.screenshotContainer?.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
 							}, completion: nil)
@@ -779,49 +779,49 @@ public class ShowCase: UIView {
 	// Screenshot was tapped
 	@objc private func targetDidTap(gestureRecognizer: UIGestureRecognizer) {
 		guard let tapGestureRecognizer = gestureRecognizer as? UITapGestureRecognizer else { return }
-		delegate?.showCase?(self, didTap: target, gestureRecognizer: tapGestureRecognizer)
+		delegate?.bubbleShowCase?(self, didTap: target, gestureRecognizer: tapGestureRecognizer)
 	}
 	
 	// Screenshot was double long pressed
 	@objc private func targetDidLongPress(gestureRecognizer: UIGestureRecognizer) {
 		guard let longPressGestureRecognizer = gestureRecognizer as? UILongPressGestureRecognizer else { return }
 		guard longPressGestureRecognizer.state == .ended else { return }
-		delegate?.showCase?(self, didLongPress: target, gestureRecognizer: longPressGestureRecognizer)
+		delegate?.bubbleShowCase?(self, didLongPress: target, gestureRecognizer: longPressGestureRecognizer)
 	}
 	
 	// Screenshot was double tapped
 	@objc private func targetDidDoubleTap(gestureRecognizer: UIGestureRecognizer) {
 		guard let tapGestureRecognizer = gestureRecognizer as? UITapGestureRecognizer else { return }
-		delegate?.showCase?(self, didDoubleTap: target, gestureRecognizer: tapGestureRecognizer)
+		delegate?.bubbleShowCase?(self, didDoubleTap: target, gestureRecognizer: tapGestureRecognizer)
 	}
 	
 	// Screenshot was double swiped leftwards
 	@objc private func targetDidSwipeLeft(gestureRecognizer: UIGestureRecognizer) {
 		guard let swipeGestureRecognizer = gestureRecognizer as? UISwipeGestureRecognizer else { return }
-		delegate?.showCase?(self, didSwipeLeft: target, gestureRecognizer: swipeGestureRecognizer)
+		delegate?.bubbleShowCase?(self, didSwipeLeft: target, gestureRecognizer: swipeGestureRecognizer)
 	}
 	
 	// Screenshot was double swiped rightwards
 	@objc private func targetDidSwipeRight(gestureRecognizer: UIGestureRecognizer) {
 		guard let swipeGestureRecognizer = gestureRecognizer as? UISwipeGestureRecognizer else { return }
-		delegate?.showCase?(self, didSwipeRight: target, gestureRecognizer: swipeGestureRecognizer)
+		delegate?.bubbleShowCase?(self, didSwipeRight: target, gestureRecognizer: swipeGestureRecognizer)
 	}
 	
 	// Screenshot was double swiped downwards
 	@objc private func targetDidSwipeDown(gestureRecognizer: UIGestureRecognizer) {
 		guard let swipeGestureRecognizer = gestureRecognizer as? UISwipeGestureRecognizer else { return }
-		delegate?.showCase?(self, didSwipeDown: target, gestureRecognizer: swipeGestureRecognizer)
+		delegate?.bubbleShowCase?(self, didSwipeDown: target, gestureRecognizer: swipeGestureRecognizer)
 	}
 	
 	// Screenshot was double swiped upwards
 	@objc private func targetDidSwipeUp(gestureRecognizer: UIGestureRecognizer) {
 		guard let swipeGestureRecognizer = gestureRecognizer as? UISwipeGestureRecognizer else { return }
-		delegate?.showCase?(self, didSwipeUp: target, gestureRecognizer: swipeGestureRecognizer)
+		delegate?.bubbleShowCase?(self, didSwipeUp: target, gestureRecognizer: swipeGestureRecognizer)
 	}
 	
 	//MARK: Embed subviews
 	
-	// Embeds the showCase in the application window
+	// Embeds the show case in the application window
 	private func embedInSuperView() {
 		self.translatesAutoresizingMaskIntoConstraints = false
 		screenWindow.addSubview(self)

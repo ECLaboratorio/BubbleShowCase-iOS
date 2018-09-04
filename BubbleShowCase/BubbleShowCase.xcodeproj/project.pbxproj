@@ -12,7 +12,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B0EE5290213E89F7003E84EC /* ShowCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ShowCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0EE5290213E89F7003E84EC /* BubbleShowCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BubbleShowCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0EE5293213E89F7003E84EC /* ShowCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowCase.h; sourceTree = "<group>"; };
 		B0EE5294213E89F7003E84EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0EE529B213E8A97003E84EC /* BubbleShowCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubbleShowCase.swift; sourceTree = "<group>"; };
@@ -32,7 +32,7 @@
 		B0EE5286213E89F7003E84EC = {
 			isa = PBXGroup;
 			children = (
-				B0EE5292213E89F7003E84EC /* ShowCase */,
+				B0EE5292213E89F7003E84EC /* BubbleShowCase */,
 				B0EE5291213E89F7003E84EC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -40,19 +40,19 @@
 		B0EE5291213E89F7003E84EC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B0EE5290213E89F7003E84EC /* ShowCase.framework */,
+				B0EE5290213E89F7003E84EC /* BubbleShowCase.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B0EE5292213E89F7003E84EC /* ShowCase */ = {
+		B0EE5292213E89F7003E84EC /* BubbleShowCase */ = {
 			isa = PBXGroup;
 			children = (
 				B0EE5293213E89F7003E84EC /* ShowCase.h */,
 				B0EE529B213E8A97003E84EC /* BubbleShowCase.swift */,
 				B0EE5294213E89F7003E84EC /* Info.plist */,
 			);
-			path = ShowCase;
+			path = BubbleShowCase;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -69,9 +69,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		B0EE528F213E89F7003E84EC /* ShowCase */ = {
+		B0EE528F213E89F7003E84EC /* BubbleShowCase */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B0EE5298213E89F7003E84EC /* Build configuration list for PBXNativeTarget "ShowCase" */;
+			buildConfigurationList = B0EE5298213E89F7003E84EC /* Build configuration list for PBXNativeTarget "BubbleShowCase" */;
 			buildPhases = (
 				B0EE528B213E89F7003E84EC /* Sources */,
 				B0EE528C213E89F7003E84EC /* Frameworks */,
@@ -82,9 +82,9 @@
 			);
 			dependencies = (
 			);
-			name = ShowCase;
+			name = BubbleShowCase;
 			productName = ShowCase;
-			productReference = B0EE5290213E89F7003E84EC /* ShowCase.framework */;
+			productReference = B0EE5290213E89F7003E84EC /* BubbleShowCase.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -102,7 +102,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B0EE528A213E89F7003E84EC /* Build configuration list for PBXProject "ShowCase" */;
+			buildConfigurationList = B0EE528A213E89F7003E84EC /* Build configuration list for PBXProject "BubbleShowCase" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -114,7 +114,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B0EE528F213E89F7003E84EC /* ShowCase */,
+				B0EE528F213E89F7003E84EC /* BubbleShowCase */,
 			);
 		};
 /* End PBXProject section */
@@ -272,7 +272,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = ShowCase/Info.plist;
+				INFOPLIST_FILE = BubbleShowCase/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -299,7 +299,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = ShowCase/Info.plist;
+				INFOPLIST_FILE = BubbleShowCase/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -317,7 +317,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B0EE528A213E89F7003E84EC /* Build configuration list for PBXProject "ShowCase" */ = {
+		B0EE528A213E89F7003E84EC /* Build configuration list for PBXProject "BubbleShowCase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B0EE5296213E89F7003E84EC /* Debug */,
@@ -326,7 +326,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B0EE5298213E89F7003E84EC /* Build configuration list for PBXNativeTarget "ShowCase" */ = {
+		B0EE5298213E89F7003E84EC /* Build configuration list for PBXNativeTarget "BubbleShowCase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B0EE5299213E89F7003E84EC /* Debug */,

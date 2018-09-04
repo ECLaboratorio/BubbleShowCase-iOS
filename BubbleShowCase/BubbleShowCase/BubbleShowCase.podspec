@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "BubbleShowCase"
-  s.version      = "0.0.1"
+  s.version      = "0.0.3"
   s.summary      = "A wonderful way to show case your users your App features"
 
   s.description  = <<-DESC

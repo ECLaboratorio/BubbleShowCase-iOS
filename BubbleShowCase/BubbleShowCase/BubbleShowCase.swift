@@ -1,5 +1,5 @@
 //
-//  ShowCase.swift
+//  BubbleShowCase.swift
 //  Angela
 //
 //  Created by fermoya on 8/13/18.

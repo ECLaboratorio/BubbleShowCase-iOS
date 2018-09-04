@@ -121,7 +121,7 @@ extension ShowCaseViewController: BubbleShowCaseDelegate {
 			self.startDemoDidTap(self.startDemoButton)
 		}
 		
-		bubbleShowCase.dimiss()
+		bubbleShowCase.dismiss()
 	}
 	
 }

@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B0EE5295213E89F7003E84EC /* ShowCase.h in Headers */ = {isa = PBXBuildFile; fileRef = B0EE5293213E89F7003E84EC /* ShowCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B0EE5295213E89F7003E84EC /* BubbleShowCase.h in Headers */ = {isa = PBXBuildFile; fileRef = B0EE5293213E89F7003E84EC /* BubbleShowCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B0EE529C213E8A97003E84EC /* BubbleShowCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EE529B213E8A97003E84EC /* BubbleShowCase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B0EE5290213E89F7003E84EC /* BubbleShowCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BubbleShowCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B0EE5293213E89F7003E84EC /* ShowCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowCase.h; sourceTree = "<group>"; };
+		B0EE5293213E89F7003E84EC /* BubbleShowCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BubbleShowCase.h; sourceTree = "<group>"; };
 		B0EE5294213E89F7003E84EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0EE529B213E8A97003E84EC /* BubbleShowCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubbleShowCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -48,7 +48,7 @@
 		B0EE5292213E89F7003E84EC /* BubbleShowCase */ = {
 			isa = PBXGroup;
 			children = (
-				B0EE5293213E89F7003E84EC /* ShowCase.h */,
+				B0EE5293213E89F7003E84EC /* BubbleShowCase.h */,
 				B0EE529B213E8A97003E84EC /* BubbleShowCase.swift */,
 				B0EE5294213E89F7003E84EC /* Info.plist */,
 			);
@@ -62,7 +62,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B0EE5295213E89F7003E84EC /* ShowCase.h in Headers */,
+				B0EE5295213E89F7003E84EC /* BubbleShowCase.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,7 +279,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.elconfidencial.ShowCase-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.elconfidencial.BubbleShowCase-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -306,7 +306,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.elconfidencial.ShowCase-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.elconfidencial.BubbleShowCase-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;

@@ -1,5 +1,5 @@
 //
-//  ShowCase.swift
+//  BubbleShowCase.swift
 //  Angela
 //
 //  Created by fermoya on 8/13/18.
@@ -334,7 +334,7 @@ public class BubbleShowCase: UIView {
 	//MARK: Public Methods
 	
 	/// Dismisses the show case out of the screen with an animation.
-	public func dimiss() {
+	public func dismiss() {
 		animateDisappearance()
 	}
 	

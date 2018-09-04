@@ -28,6 +28,7 @@ class ShowCaseViewController: UIViewController {
 	}
 	
 	private var isCellShowCaseShown = false
+	private var isDemoStarted = false
 	
 	init() {
 		super.init(nibName: nil, bundle: nil)
@@ -55,15 +56,19 @@ class ShowCaseViewController: UIViewController {
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		
-		let showCaseOnView = BubbleShowCase(target: startDemoButton, arrowDirection: .down, label: "startDemoButton")
-		showCaseOnView.titleText = "Tap here to close it"
-		showCaseOnView.descriptionText = "You will start the demo"
-		showCaseOnView.arrowDirection = .right
-		showCaseOnView.shadowColor = startDemoButton.titleColor(for: .normal)
-		showCaseOnView.isCrossDismissable = false
-		showCaseOnView.delegate = self
-		
-		showCaseOnView.show()
+		if !isDemoStarted {
+			let showCaseOnView = BubbleShowCase(target: startDemoButton, arrowDirection: .down, label: "startDemoButton")
+			showCaseOnView.titleText = "Tap here to close it"
+			showCaseOnView.descriptionText = "You will start the demo"
+			showCaseOnView.arrowDirection = .right
+			showCaseOnView.shadowColor = startDemoButton.titleColor(for: .normal)
+			showCaseOnView.isCrossDismissable = false
+			showCaseOnView.delegate = self
+			
+			showCaseOnView.show()
+			
+			isDemoStarted = true
+		}
 	}
 	
 	@IBAction func startDemoDidTap(_ sender: UIButton) {

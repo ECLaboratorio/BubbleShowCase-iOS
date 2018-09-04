@@ -21,7 +21,7 @@
 		30B45FB9E59EF86D8BA1115C /* Pods-ShowCaseSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShowCaseSample.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShowCaseSample/Pods-ShowCaseSample.release.xcconfig"; sourceTree = "<group>"; };
 		5A024C2CD6571CA3B9901DE7 /* Pods-ShowCaseSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShowCaseSample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShowCaseSample/Pods-ShowCaseSample.debug.xcconfig"; sourceTree = "<group>"; };
 		A8973C21C19F887508C91975 /* Pods_ShowCaseSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShowCaseSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B09C540B213942950073610D /* ShowCaseSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShowCaseSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B09C540B213942950073610D /* BubbleShowCaseSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BubbleShowCaseSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B09C540E213942950073610D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B09C5415213942990073610D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B09C5418213942990073610D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -55,7 +55,7 @@
 		B09C5402213942950073610D = {
 			isa = PBXGroup;
 			children = (
-				B09C540D213942950073610D /* ShowCaseSample */,
+				B09C540D213942950073610D /* BubbleShowCaseSample */,
 				B09C540C213942950073610D /* Products */,
 				BB15E48E84466078F6964F45 /* Pods */,
 				0D7A7883D49C8B6F560917DB /* Frameworks */,
@@ -65,12 +65,12 @@
 		B09C540C213942950073610D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B09C540B213942950073610D /* ShowCaseSample.app */,
+				B09C540B213942950073610D /* BubbleShowCaseSample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B09C540D213942950073610D /* ShowCaseSample */ = {
+		B09C540D213942950073610D /* BubbleShowCaseSample */ = {
 			isa = PBXGroup;
 			children = (
 				B09C541A213942990073610D /* Info.plist */,
@@ -82,7 +82,7 @@
 				B09C5428213947990073610D /* ShowCaseViewController.swift */,
 				B09C5429213947990073610D /* ShowCaseViewController.xib */,
 			);
-			path = ShowCaseSample;
+			path = BubbleShowCaseSample;
 			sourceTree = "<group>";
 		};
 		BB15E48E84466078F6964F45 /* Pods */ = {
@@ -97,9 +97,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B09C540A213942950073610D /* ShowCaseSample */ = {
+		B09C540A213942950073610D /* BubbleShowCaseSample */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B09C541D213942990073610D /* Build configuration list for PBXNativeTarget "ShowCaseSample" */;
+			buildConfigurationList = B09C541D213942990073610D /* Build configuration list for PBXNativeTarget "BubbleShowCaseSample" */;
 			buildPhases = (
 				B7F09FE781C5A17EFEA0D0B2 /* [CP] Check Pods Manifest.lock */,
 				B09C5407213942950073610D /* Sources */,
@@ -111,9 +111,9 @@
 			);
 			dependencies = (
 			);
-			name = ShowCaseSample;
+			name = BubbleShowCaseSample;
 			productName = ShowCaseSample;
-			productReference = B09C540B213942950073610D /* ShowCaseSample.app */;
+			productReference = B09C540B213942950073610D /* BubbleShowCaseSample.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -131,7 +131,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B09C5406213942950073610D /* Build configuration list for PBXProject "ShowCaseSample" */;
+			buildConfigurationList = B09C5406213942950073610D /* Build configuration list for PBXProject "BubbleShowCaseSample" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -144,7 +144,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B09C540A213942950073610D /* ShowCaseSample */,
+				B09C540A213942950073610D /* BubbleShowCaseSample */,
 			);
 		};
 /* End PBXProject section */
@@ -348,7 +348,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FBA457B3ZU;
-				INFOPLIST_FILE = ShowCaseSample/Info.plist;
+				INFOPLIST_FILE = BubbleShowCaseSample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -369,7 +369,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FBA457B3ZU;
-				INFOPLIST_FILE = ShowCaseSample/Info.plist;
+				INFOPLIST_FILE = BubbleShowCaseSample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -386,7 +386,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B09C5406213942950073610D /* Build configuration list for PBXProject "ShowCaseSample" */ = {
+		B09C5406213942950073610D /* Build configuration list for PBXProject "BubbleShowCaseSample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B09C541B213942990073610D /* Debug */,
@@ -395,7 +395,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B09C541D213942990073610D /* Build configuration list for PBXNativeTarget "ShowCaseSample" */ = {
+		B09C541D213942990073610D /* Build configuration list for PBXNativeTarget "BubbleShowCaseSample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B09C541E213942990073610D /* Debug */,

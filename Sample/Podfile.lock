@@ -1,5 +1,5 @@
 PODS:
-  - BubbleShowCase (0.0.3)
+  - BubbleShowCase (0.0.5)
 
 DEPENDENCIES:
   - BubbleShowCase
@@ -9,7 +9,7 @@ SPEC REPOS:
     - BubbleShowCase
 
 SPEC CHECKSUMS:
-  BubbleShowCase: 2f2f014af051be06d205dca17d62e8c7d7cecace
+  BubbleShowCase: 850314ae22dc5bd6d88427cc3c02f0b7f01739d7
 
 PODFILE CHECKSUM: c9f2160adbf20d26d642865800eac30cde2a746c
 

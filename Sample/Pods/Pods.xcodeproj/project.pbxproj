@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		338F0B4D49590C1476D5F92962475AA8 /* Pods-ShowCaseSample-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C72446B27E280D9AC95E741F64F18424 /* Pods-ShowCaseSample-dummy.m */; };
-		4FC20C1EBB848818306E7C705A778830 /* BubbleShowCase-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B81B02E9E02A81EB32C825E7A39CDA2 /* BubbleShowCase-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FC20C1EBB848818306E7C705A778830 /* BubbleShowCase-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B119113ED4F7C2FC789C2F34EEFF342 /* BubbleShowCase-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A27E279EB33AB1308D2BAA3C5FAF7B7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */; };
 		9CC069756574A559954F1C8A11EF858B /* Pods-ShowCaseSample-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 126898D2985B10CD2726D97AF4877915 /* Pods-ShowCaseSample-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3910DB8C1B17DDD22F72404D903F6DB /* BubbleShowCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10BC36DE25892F853D99579FD8EC8260 /* BubbleShowCase.swift */; };
 		CACDE44CB372F74D094FE9B028C1C91F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */; };
-		DD2B508CDF54AA83300924FAFC983E0F /* BubbleShowCase-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D5798FD0440DF3372E4757E113D9CA71 /* BubbleShowCase-dummy.m */; };
-		EC936BFBE98C7F4D3E80AD506310EEC3 /* BubbleShowCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFA878411C62AE141B27B851646009 /* BubbleShowCase.swift */; };
+		DD2B508CDF54AA83300924FAFC983E0F /* BubbleShowCase-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = CA71F9792F155AD1E5902645C0948725 /* BubbleShowCase-dummy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,25 +28,25 @@
 
 /* Begin PBXFileReference section */
 		06CB474FD09D0642F587C10F8F1EDEC2 /* Pods-ShowCaseSample-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ShowCaseSample-resources.sh"; sourceTree = "<group>"; };
-		0B6234FA93B30D074323FEB910A4BA76 /* BubbleShowCase-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BubbleShowCase-prefix.pch"; sourceTree = "<group>"; };
-		0C186F98A126D5ABD3B3740546B628C0 /* BubbleShowCase.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BubbleShowCase.xcconfig; sourceTree = "<group>"; };
-		10D5D8B73F60D916E06350E87E790A33 /* BubbleShowCase.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = BubbleShowCase.modulemap; sourceTree = "<group>"; };
+		10BC36DE25892F853D99579FD8EC8260 /* BubbleShowCase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BubbleShowCase.swift; path = BubbleShowCase/BubbleShowCase/BubbleShowCase.swift; sourceTree = "<group>"; };
 		126898D2985B10CD2726D97AF4877915 /* Pods-ShowCaseSample-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ShowCaseSample-umbrella.h"; sourceTree = "<group>"; };
 		1372A7A0726B83DC5ACDD6B44BA75919 /* Pods-ShowCaseSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ShowCaseSample.debug.xcconfig"; sourceTree = "<group>"; };
+		231DBEB3BC1120538129D4559878274E /* BubbleShowCase-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BubbleShowCase-prefix.pch"; sourceTree = "<group>"; };
+		2DFDEF1A3310A31A14746574A0F37E85 /* BubbleShowCase.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BubbleShowCase.xcconfig; sourceTree = "<group>"; };
 		49E03F3A261F217373CA84A6B1C39367 /* Pods-ShowCaseSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ShowCaseSample.release.xcconfig"; sourceTree = "<group>"; };
-		547C7EE8EE965948C4A715ADA4556D2F /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		787239B4E878DE0CFC11D5F59E37596B /* BubbleShowCase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = BubbleShowCase.framework; path = BubbleShowCase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B119113ED4F7C2FC789C2F34EEFF342 /* BubbleShowCase-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BubbleShowCase-umbrella.h"; sourceTree = "<group>"; };
+		7E200D2F375360463643F1A5B0E23E27 /* BubbleShowCase.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = BubbleShowCase.modulemap; sourceTree = "<group>"; };
 		8AC4471BAC5432FE6893FFA5ACCA2B38 /* Pods-ShowCaseSample-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ShowCaseSample-acknowledgements.markdown"; sourceTree = "<group>"; };
+		8C5925DE73E42306E96AD481F022D40B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9B81B02E9E02A81EB32C825E7A39CDA2 /* BubbleShowCase-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BubbleShowCase-umbrella.h"; sourceTree = "<group>"; };
 		A3F70133F24D6C52660CD7751DC89378 /* Pods_ShowCaseSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_ShowCaseSample.framework; path = "Pods-ShowCaseSample.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B126BB976CAB85C61799E299D4A54AE5 /* Pods-ShowCaseSample-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ShowCaseSample-frameworks.sh"; sourceTree = "<group>"; };
 		C0C8E5B1A4047A16109554A7A511765B /* Pods-ShowCaseSample-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ShowCaseSample-acknowledgements.plist"; sourceTree = "<group>"; };
 		C72446B27E280D9AC95E741F64F18424 /* Pods-ShowCaseSample-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ShowCaseSample-dummy.m"; sourceTree = "<group>"; };
 		C9CBEA23C25DDFCC02284DF431343245 /* Pods-ShowCaseSample.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ShowCaseSample.modulemap"; sourceTree = "<group>"; };
-		D5798FD0440DF3372E4757E113D9CA71 /* BubbleShowCase-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "BubbleShowCase-dummy.m"; sourceTree = "<group>"; };
-		D8EFA878411C62AE141B27B851646009 /* BubbleShowCase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BubbleShowCase.swift; path = ShowCase/ShowCase/BubbleShowCase.swift; sourceTree = "<group>"; };
+		CA71F9792F155AD1E5902645C0948725 /* BubbleShowCase-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "BubbleShowCase-dummy.m"; sourceTree = "<group>"; };
 		DCFD2A13ABA3844E66BE2226DFFB9177 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,20 +70,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3ABDEACF8CF4AE69CCF25CF310C6C490 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				10D5D8B73F60D916E06350E87E790A33 /* BubbleShowCase.modulemap */,
-				0C186F98A126D5ABD3B3740546B628C0 /* BubbleShowCase.xcconfig */,
-				D5798FD0440DF3372E4757E113D9CA71 /* BubbleShowCase-dummy.m */,
-				0B6234FA93B30D074323FEB910A4BA76 /* BubbleShowCase-prefix.pch */,
-				9B81B02E9E02A81EB32C825E7A39CDA2 /* BubbleShowCase-umbrella.h */,
-				547C7EE8EE965948C4A715ADA4556D2F /* Info.plist */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/BubbleShowCase";
-			sourceTree = "<group>";
-		};
 		3ABF5818CD98C5BB8A26B2FF9FBAE2B6 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -100,6 +86,20 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
+		74A0D36283F4993EBBA2A0674C1442AB /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				7E200D2F375360463643F1A5B0E23E27 /* BubbleShowCase.modulemap */,
+				2DFDEF1A3310A31A14746574A0F37E85 /* BubbleShowCase.xcconfig */,
+				CA71F9792F155AD1E5902645C0948725 /* BubbleShowCase-dummy.m */,
+				231DBEB3BC1120538129D4559878274E /* BubbleShowCase-prefix.pch */,
+				7B119113ED4F7C2FC789C2F34EEFF342 /* BubbleShowCase-umbrella.h */,
+				8C5925DE73E42306E96AD481F022D40B /* Info.plist */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/BubbleShowCase";
+			sourceTree = "<group>";
+		};
 		7DB346D0F39D3F0E887471402A8071AB = {
 			isa = PBXGroup;
 			children = (
@@ -111,11 +111,11 @@
 			);
 			sourceTree = "<group>";
 		};
-		983298DE5C88E3086796A0B07E182B13 /* BubbleShowCase */ = {
+		96B3CC7F127634E2E7E5E5994CF5C63A /* BubbleShowCase */ = {
 			isa = PBXGroup;
 			children = (
-				D8EFA878411C62AE141B27B851646009 /* BubbleShowCase.swift */,
-				3ABDEACF8CF4AE69CCF25CF310C6C490 /* Support Files */,
+				10BC36DE25892F853D99579FD8EC8260 /* BubbleShowCase.swift */,
+				74A0D36283F4993EBBA2A0674C1442AB /* Support Files */,
 			);
 			name = BubbleShowCase;
 			path = BubbleShowCase;
@@ -159,7 +159,7 @@
 		F52F1084FD78FE1B8C8D5A78C1E458F5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				983298DE5C88E3086796A0B07E182B13 /* BubbleShowCase */,
+				96B3CC7F127634E2E7E5E5994CF5C63A /* BubbleShowCase */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -254,7 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD2B508CDF54AA83300924FAFC983E0F /* BubbleShowCase-dummy.m in Sources */,
-				EC936BFBE98C7F4D3E80AD506310EEC3 /* BubbleShowCase.swift in Sources */,
+				B3910DB8C1B17DDD22F72404D903F6DB /* BubbleShowCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,7 +343,7 @@
 		};
 		233FA04E435CF9FFE948E86467C41E27 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0C186F98A126D5ABD3B3740546B628C0 /* BubbleShowCase.xcconfig */;
+			baseConfigurationReference = 2DFDEF1A3310A31A14746574A0F37E85 /* BubbleShowCase.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -457,7 +457,7 @@
 		};
 		F0A9EC7792ED6CA0572AFAC8EB6F3F7D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0C186F98A126D5ABD3B3740546B628C0 /* BubbleShowCase.xcconfig */;
+			baseConfigurationReference = 2DFDEF1A3310A31A14746574A0F37E85 /* BubbleShowCase.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";

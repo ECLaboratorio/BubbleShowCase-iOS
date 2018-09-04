@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:ShowCaseSample.xcodeproj">
+      location = "group:/Users/fmoya/Documents/Repositories/ShowCase-iOS/Sample/BubbleShowCaseSample.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

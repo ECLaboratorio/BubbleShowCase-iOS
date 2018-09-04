@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "BubbleShowCase"
-  s.version      = "0.0.3"
+  s.version      = "0.0.5"
   s.summary      = "A wonderful way to show case your users your App features"
 
   s.description  = <<-DESC
@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.swift_version = '4.0'
 
   s.source       = { :git => "https://github.com/ECLaboratorio/ShowCase-iOS.git", :tag => "#{s.version}" }
-  s.source_files  = "ShowCase/ShowCase/*.swift"
+  s.source_files  = "BubbleShowCase/BubbleShowCase/*.swift"
 
   s.xcconfig = { "SWIFT_VERSION" => "4.0" }
 

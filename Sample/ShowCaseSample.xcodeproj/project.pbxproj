@@ -11,7 +11,6 @@
 		B09C540F213942950073610D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09C540E213942950073610D /* AppDelegate.swift */; };
 		B09C5416213942990073610D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B09C5415213942990073610D /* Assets.xcassets */; };
 		B09C5419213942990073610D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B09C5417213942990073610D /* LaunchScreen.storyboard */; };
-		B09C5421213942FD0073610D /* ShowCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09C5420213942FD0073610D /* ShowCase.swift */; };
 		B09C5426213946D80073610D /* DummyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09C5424213946D80073610D /* DummyViewController.swift */; };
 		B09C5427213946D80073610D /* DummyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B09C5425213946D80073610D /* DummyViewController.xib */; };
 		B09C542A213947990073610D /* ShowCaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09C5428213947990073610D /* ShowCaseViewController.swift */; };
@@ -27,7 +26,6 @@
 		B09C5415213942990073610D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B09C5418213942990073610D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B09C541A213942990073610D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B09C5420213942FD0073610D /* ShowCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCase.swift; sourceTree = "<group>"; };
 		B09C5424213946D80073610D /* DummyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyViewController.swift; sourceTree = "<group>"; };
 		B09C5425213946D80073610D /* DummyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DummyViewController.xib; sourceTree = "<group>"; };
 		B09C5428213947990073610D /* ShowCaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCaseViewController.swift; sourceTree = "<group>"; };
@@ -79,7 +77,6 @@
 				B09C5415213942990073610D /* Assets.xcassets */,
 				B09C540E213942950073610D /* AppDelegate.swift */,
 				B09C5417213942990073610D /* LaunchScreen.storyboard */,
-				B09C5420213942FD0073610D /* ShowCase.swift */,
 				B09C5424213946D80073610D /* DummyViewController.swift */,
 				B09C5425213946D80073610D /* DummyViewController.xib */,
 				B09C5428213947990073610D /* ShowCaseViewController.swift */,
@@ -108,6 +105,7 @@
 				B09C5407213942950073610D /* Sources */,
 				B09C5408213942950073610D /* Frameworks */,
 				B09C5409213942950073610D /* Resources */,
+				E3D1A31154AA15F38A9A3B52 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -184,6 +182,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		E3D1A31154AA15F38A9A3B52 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ShowCaseSample/Pods-ShowCaseSample-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/BubbleShowCase/BubbleShowCase.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BubbleShowCase.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ShowCaseSample/Pods-ShowCaseSample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -191,7 +207,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B09C5421213942FD0073610D /* ShowCase.swift in Sources */,
 				B09C540F213942950073610D /* AppDelegate.swift in Sources */,
 				B09C5426213946D80073610D /* DummyViewController.swift in Sources */,
 				B09C542A213947990073610D /* ShowCaseViewController.swift in Sources */,
@@ -343,6 +358,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 			};
 			name = Debug;
 		};
@@ -363,6 +379,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 			};
 			name = Release;
 		};

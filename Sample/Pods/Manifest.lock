@@ -1,3 +1,16 @@
-PODFILE CHECKSUM: 19f2f21b76b5f27733662b896c0465d1d2a543e3
+PODS:
+  - BubbleShowCase (0.0.1)
+
+DEPENDENCIES:
+  - BubbleShowCase
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - BubbleShowCase
+
+SPEC CHECKSUMS:
+  BubbleShowCase: 29c92e692b7b6ea1b54063efcbe1fa0157098436
+
+PODFILE CHECKSUM: c9f2160adbf20d26d642865800eac30cde2a746c
 
 COCOAPODS: 1.5.3

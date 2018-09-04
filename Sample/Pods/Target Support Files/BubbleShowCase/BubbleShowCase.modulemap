@@ -1,0 +1,6 @@
+framework module BubbleShowCase {
+  umbrella header "BubbleShowCase-umbrella.h"
+
+  export *
+  module * { export * }
+}

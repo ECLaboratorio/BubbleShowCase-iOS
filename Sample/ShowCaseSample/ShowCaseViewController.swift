@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BubbleShowCase
 
 class ShowCaseViewController: UIViewController {
 

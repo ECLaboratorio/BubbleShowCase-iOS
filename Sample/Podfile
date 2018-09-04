@@ -6,5 +6,6 @@ target 'ShowCaseSample' do
   use_frameworks!
 
   # Pods for ShowCaseSample
+  pod 'BubbleShowCase'
 
 end

@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "BubbleShowCase"
-  s.version      = "0.0.5"
+  s.version      = "0.0.6"
   s.summary      = "A wonderful way to show case your users your App features"
 
   s.description  = <<-DESC
@@ -22,5 +22,6 @@ Pod::Spec.new do |s|
   s.source_files  = "BubbleShowCase/BubbleShowCase/*.swift"
 
   s.xcconfig = { "SWIFT_VERSION" => "4.0" }
+  s.documentation_url = "https://github.com/ECLaboratorio/BubbleShowCase-iOS/blob/master/README.md"
 
 end

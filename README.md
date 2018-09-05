@@ -1,4 +1,12 @@
 # BubbleShowCase
+
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Download](https://img.shields.io/cocoapods/v/BubbleShowCase.svg)](https://cocoapods.org/pods/BubbleShowCase)
+<!-- [![CocoaPods downloaded](https://img.shields.io/cocoapods/dt/BubbleShowCase.svg)](https://cocoapods.org/pods/BubbleShowCase)
+[![CocoaPods installed](https://img.shields.io/cocoapods/at/BubbleShowCase.svg)](https://cocoapods.org/pods/BubbleShowCase) -->
+[![CocoaPods platforms](https://img.shields.io/cocoapods/p/BubbleShowCase.svg)](https://cocoapods.org/pods/BubbleShowCase)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 BubbleShowCase is an elegant and easy to use framework that provides developers with a user-friendly buble-like view you can display to help your users understand your App features, improve the use of some functionality or display your App onboarding. It consists of a translucent view that obscures the screen, a bubble that displays the message for your user and the targeted view itself.
 
 <img src="resources/example-of-usage.gif" alt="GIF" height="700"/>
@@ -17,7 +25,7 @@ pod 'BubbleShowCase'
 ### Carthage
 To integrate BubbleShowCase into your Xcode project using Carthage, create a `Cartfile` and add:
 ```ogdl
-github 'ECLaboratorio/BubbleShowCase-iOS'
+github "ECLaboratorio/BubbleShowCase-iOS"
 ```
 
 You can install Carthage with [Homebrew](http://brew.sh/) using the following command:

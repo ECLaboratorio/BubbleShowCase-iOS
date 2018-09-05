@@ -54,7 +54,7 @@ This so called show case obscurs the scene, pops up above any other view in the 
 # Example #
 ````
 ...
-let showCase = BubbleShowCaseShow(target: myBarButton, label: "BarButtonShowCase")
+let showCase: BubbleShowCase! = BubbleShowCase(target: myBarButton)
 showCase.titleText = "You know what?"
 showCase.descriptionText = "You can do amazing things if you tap on this navbar button"
 showCase.image = UIImage(named: "show-case-bar-button")

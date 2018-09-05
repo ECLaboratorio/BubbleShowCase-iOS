@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target  = '9.0'
   s.swift_version = '4.0'
 
-  s.source       = { :git => "https://github.com/ECLaboratorio/ShowCase-iOS.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/ECLaboratorio/BubbleShowCase-iOS.git", :tag => "#{s.version}" }
   s.source_files  = "BubbleShowCase/BubbleShowCase/*.swift"
 
   s.xcconfig = { "SWIFT_VERSION" => "4.0" }

@@ -1,7 +1,7 @@
 # BubbleShowCase
 BubbleShowCase is an elegant and easy to use framework that provides developers with a user-friendly buble-like view you can display to help your users understand your App features, improve the use of some functionality or display your App onboarding. It consists of a translucent view that obscures the screen, a bubble that displays the message for your user and the targeted view itself.
 
-![Screenshots](https://github.com/ECLaboratorio/BubbleShowCase-iOS/blob/master/resources/example-of-usage.gif)
+<img src="resources/example-of-usage.gif" alt="GIF" height="700"/>
 
 ## Requirement
 * iOS 9.0+

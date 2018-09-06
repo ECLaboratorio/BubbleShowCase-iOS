@@ -90,6 +90,10 @@ showCase.delegate = self
 showCase.titleFont = UIFont(name: "Roboto-Bold", size: 14)!
 showCase.descriptionFont = UIFont(name: "Roboto-Regular", size: 13)!
 
+showCase.showAnimationDuration = 0.2
+showCase.dismissAnimationDuration = 0.2
+showCase.flickerAnimationDuration = 0.2
+
 // Use this to force your users to tap or perform any other gesture over the target view
 showCase.isCrossDismissable = false	
 ```
@@ -97,7 +101,7 @@ showCase.isCrossDismissable = false
 
 ### Concatenating show cases
 
-Do you need to show-case several features one after another? Tha's easy, you just have to call `concat(bubbleShowCase:)` or `show(after:)`. The former concatenates the argument as the next show case to show whereas the latter displays the show case after the argument:
+Do you need to show-case several features one after another? That's easy, you just have to call `concat(bubbleShowCase:)` or `show(after:)`. The former concatenates the argument as the next show case to show whereas the latter displays the show case after the argument:
 ```swift
 let firstShowCase = BubbleShowCase(...)
 let secondShowCase = BubbleShowCase(...)

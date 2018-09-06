@@ -68,13 +68,14 @@ showCase.show()
 public class BubbleShowCase: UIView {
 	
 	/**
-	It indicates the direction the show case should point to. There are 6 options:
+	It indicates the direction the show case should point to. There are 7 options:
 	- Left
 	- Right
 	- Up
 	- Down
 	- Up and Down
 	- Left and right
+	- None
 	*/
 	public enum ArrowDirection {
 		/// It points leftwards, making the show case stays on the right side of the target.
@@ -94,6 +95,9 @@ public class BubbleShowCase: UIView {
 		
 		/// It displays to arrows pointing leftwards and rightwards respectively. The show case pops up centered in the target.
 		case leftAndRight
+		
+		/// No arrow is displayed
+		case none
 	}
 	
 	//MARK: Public properties
@@ -158,6 +162,15 @@ public class BubbleShowCase: UIView {
 		}
 	}
 	
+	/// Time in seconds that it takes to complete the entry animation
+	public var showAnimationDuration: Double = 0.4
+	
+	/// Time in seconds that it takes to complete the exit animation
+	public var dismissAnimationDuration: Double = 0.4
+	
+	/// Time in seconds that it takes to complete one screenshot flicker
+	public var flickerAnimationDuration: Double = 0.4
+	
 	/// Indicates wether or not the user can close the show case by tapping a cross that is displayed on the top right. Set this property to *false* this to force the user to perform any action on the target.
 	public var isCrossDismissable = true { didSet { cross?.isHidden = !isCrossDismissable } }
 	
@@ -213,9 +226,13 @@ public class BubbleShowCase: UIView {
 	private var screenshotWidth: NSLayoutConstraint!
 	private var screenshotLeading: NSLayoutConstraint!
 	
+	private var bubbleLeading: NSLayoutConstraint?
+	private var bubbleTrailing: NSLayoutConstraint?
+	
 	/****************** FLAGS *********************/
 	private var shouldWhitenScreenshot = false
 	private var isInitialized = false
+	private var isBarButton = false
 	
 	/************* ROOT HIERARCHY *****************/
 	private weak var target: UIView!
@@ -225,6 +242,10 @@ public class BubbleShowCase: UIView {
 	/***************** LAYERS *********************/
 	private var crossLayer: CAShapeLayer?
 	private var arrowLayers: [CAShapeLayer]?
+	
+	/************** ORIENTATION *******************/
+	private var currentOrientation: UIDeviceOrientation = .unknown
+	private var previousOrientation: UIDeviceOrientation = .unknown
 	
 	/***************** CONCAT *********************/
 	fileprivate var nextShowCase: BubbleShowCase?
@@ -259,7 +280,7 @@ public class BubbleShowCase: UIView {
 	
 	*/
 	public init?(target: UIBarButtonItem, label: String? = nil) {
-		let targetViewUnwrapped = (target.value(forKey: "view") as? UIView) ?? target.customView
+		let targetViewUnwrapped = target.customView ?? (target.value(forKey: "view") as? UIView) 
 		guard let targetView = targetViewUnwrapped else { return nil }
 		
 		self.target = targetView
@@ -267,6 +288,7 @@ public class BubbleShowCase: UIView {
 		self.label = label
 		super.init(frame: CGRect.zero)
 		
+		isBarButton = true
 		shouldWhitenScreenshot = true
 		setUp()
 	}
@@ -347,6 +369,8 @@ public class BubbleShowCase: UIView {
 	}
 	
 	deinit {
+		bubbleLeading = nil
+		bubbleTrailing = nil
 		screenshotTop = nil
 		screenshotHeight = nil
 		screenshotWidth = nil
@@ -465,11 +489,13 @@ public class BubbleShowCase: UIView {
 	
 	// Common set up for the showcase
 	private func setUp() {
+		currentOrientation = UIDevice.current.orientation
+		previousOrientation = currentOrientation
 		NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .UIDeviceOrientationDidChange, object: nil)
 	}
 	
 	// Initializes the show case hierarchy and displays the show case into the screen.
-	private func initialize(animated: Bool = true) {
+	private func initialize() {
 		isInitialized = true
 		self.isOpaque = false
 		
@@ -478,7 +504,7 @@ public class BubbleShowCase: UIView {
 		}
 		
 		embedInSuperView()
-		if arrowDirection != .leftAndRight && arrowDirection != .upAndDown {
+		if arrowDirection != .leftAndRight && arrowDirection != .upAndDown && arrowDirection != .none {
 			embedScreenshot()
 		}
 		
@@ -487,13 +513,7 @@ public class BubbleShowCase: UIView {
 		if isCrossDismissable { drawCross() }
 		drawArrow()
 		
-		if animated {
-			animateAppearance()
-		} else {
-			alpha = 1
-			screenshotContainer.alpha = 1
-			bubble.alpha = 1
-		}
+		animateAppearance()
 	}
 	
 	//MARK: Animations
@@ -502,7 +522,7 @@ public class BubbleShowCase: UIView {
 	private func animateDisappearance() {
 		delegate?.bubbleShowCaseWillDismiss?(self)
 		nextShowCase?.show()
-		UIView.animate(withDuration: 0.4, animations: { [weak self] in
+		UIView.animate(withDuration: dismissAnimationDuration, animations: { [weak self] in
 			self?.alpha = 0
 			}, completion: { [weak self] _ in
 				guard let `self` = self else { return }
@@ -518,7 +538,7 @@ public class BubbleShowCase: UIView {
 		bubble.alpha = 0
 		screenshotContainer?.alpha = 0
 		screenWindow.bringSubview(toFront: self)
-		UIView.animate(withDuration: 0.4, animations: { [weak self] in
+		UIView.animate(withDuration: showAnimationDuration, animations: { [weak self] in
 			self?.alpha = 1
 			self?.screenshotContainer?.alpha = 1
 			}, completion: { [weak self] _ in
@@ -526,12 +546,12 @@ public class BubbleShowCase: UIView {
 				self.bubble.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
 				self.bubble.alpha = 1
 				
-				UIView.animate(withDuration: 0.5, delay: 0.5, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: { [weak self] in
+				UIView.animate(withDuration: self.showAnimationDuration, delay: self.showAnimationDuration, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: { [weak self] in
 					self?.bubble.transform = .identity
 					}, completion: { [weak self] _ in
 						guard let `self` = self else { return }
 						self.delegate?.bubbleShowCaseDidTransitionIntoScreen?(self)
-						UIView.animate(withDuration: 0.4, delay: 0, options: [.autoreverse, .repeat, .allowUserInteraction], animations: { [weak self] in
+						UIView.animate(withDuration: self.flickerAnimationDuration, delay: 0, options: [.autoreverse, .repeat, .allowUserInteraction], animations: { [weak self] in
 							self?.screenshotContainer?.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
 							}, completion: nil)
 				})
@@ -541,10 +561,27 @@ public class BubbleShowCase: UIView {
 	
 	//MARK: Drawing
 	
+	// Redraws those elements that are affected by some change in the screen bounds
 	private func redraw() {
 		takeScreenshot()
 		arrow.removeFromSuperview()
 		drawArrow()
+		
+		bubble.isHidden = false
+		screenshotContainer?.isHidden = false
+		
+		guard previousOrientation == .portrait || previousOrientation == .landscapeRight || previousOrientation == .landscapeLeft else { return }
+		
+		switch currentOrientation {
+		case .portrait:
+			bubbleLeading?.constant = (bubbleLeading?.constant ?? 0) - safeAreaMargins.top
+			bubbleTrailing?.constant = (bubbleTrailing?.constant ?? 0) + safeAreaMargins.top
+		case .landscapeLeft, .landscapeRight:
+			bubbleLeading?.constant = (bubbleLeading?.constant ?? 0) + safeAreaMargins.left
+			bubbleTrailing?.constant = (bubbleTrailing?.constant ?? 0) - safeAreaMargins.left
+		case .portraitUpsideDown, .faceUp, .faceDown, .unknown:
+			break
+		}
 	}
 	
 	// Creates a button, draws a cross inside and places it at the top right of the bubble
@@ -582,6 +619,8 @@ public class BubbleShowCase: UIView {
 	
 	// Draws the arrow that the bubble will use to point to the target considering the direction specified.
 	private func drawArrow() {
+		guard arrowDirection != .none else { return }
+		
 		arrow = UIView()
 		arrow.translatesAutoresizingMaskIntoConstraints = false
 		bubble.addSubview(arrow)
@@ -715,6 +754,8 @@ public class BubbleShowCase: UIView {
 			path2.addLine(to: CGPoint(x: 0, y: 0))
 			path2.addLine(to: CGPoint(x: 0, y:  2 * arrowSize))
 			path2.addLine(to: CGPoint(x: arrowSize, y: arrowSize))
+		case .none:
+			break
 		}
 		
 		let layer = CAShapeLayer()
@@ -822,8 +863,17 @@ public class BubbleShowCase: UIView {
 	
 	//MARK: Events
 	
+	// Device was rotated
 	@objc private func deviceDidRotate() {
 		guard isInitialized else { return }
+		guard UIDevice.current.orientation != currentOrientation else { return }
+		
+		bubble.isHidden = true
+		screenshotContainer?.isHidden = true
+		
+		previousOrientation = currentOrientation
+		currentOrientation = UIDevice.current.orientation
+		
 		DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) { [weak self] in		// Gives time to the screen to update
 			self?.redraw()
 		}
@@ -917,18 +967,32 @@ public class BubbleShowCase: UIView {
 	private func takeScreenshot() {
 		guard screenshotContainer != nil else { return }
 		
-		for subview in screenshotContainer.subviews {
-			subview.removeFromSuperview()
-		}
+		screenshotContainer.subviews.forEach { $0.removeFromSuperview() }
 		
-		let navbarHeight = UIApplication.shared.keyWindow?.rootViewController?.navigationController?.navigationBar.frame.height ?? 44
+		let screenshotShadow = UIView()
+		screenshotShadow.backgroundColor = .clear
+		screenshotShadow.translatesAutoresizingMaskIntoConstraints = false
+		screenshotContainer.addSubview(screenshotShadow)
+		
+		let top = NSLayoutConstraint(item: screenshotShadow, attribute: .top, relatedBy: .equal, toItem: screenshotContainer, attribute: .top, multiplier: 1, constant: 0)
+		let leading = NSLayoutConstraint(item: screenshotShadow, attribute: .leading, relatedBy: .equal, toItem: screenshotContainer, attribute: .leading, multiplier: 1, constant: 0)
+		let trailing = NSLayoutConstraint(item: screenshotShadow, attribute: .trailing, relatedBy: .equal, toItem: screenshotContainer, attribute: .trailing, multiplier: 1, constant: 0)
+		let bottom = NSLayoutConstraint(item: screenshotShadow, attribute: .bottom, relatedBy: .equal, toItem: screenshotContainer, attribute: .bottom, multiplier: 1, constant: 0)
+		
+		screenshotContainer.addConstraints([top, leading, trailing, bottom])
+		
+		screenshotShadow.layer.cornerRadius = 5
+		screenshotShadow.layer.masksToBounds = true
+		screenshotShadow.backgroundColor =  self.shouldWhitenScreenshot ? .white : .clear
+		
+		let barHeight: CGFloat = isBarButton ? 44 : 49
 		let targetFrame = target.convert(target.bounds, to: screenWindow)
 		var screenShotFrame = targetFrame
 		if shouldWhitenScreenshot {
 			screenShotFrame = CGRect(x: targetFrame.origin.x - 4,
-									 y: targetFrame.origin.y - (navbarHeight - targetFrame.height) / 2,
+									 y: targetFrame.origin.y - (barHeight - targetFrame.height) / 2,
 									 width: targetFrame.width + 2 * 4,
-									 height: navbarHeight)
+									 height: barHeight)
 		}
 		
 		screenshotTop.constant = screenShotFrame.origin.y
@@ -942,26 +1006,15 @@ public class BubbleShowCase: UIView {
 			let parent: UIView! = self.target.superview ?? self.target
 			let screenshot: UIView! = parent.resizableSnapshotView(from: self.target.frame, afterScreenUpdates: false, withCapInsets: UIEdgeInsets.zero)
 			
-			if self.shouldWhitenScreenshot {
-				screenshot.backgroundColor = UIColor.white
-			}
-			
 			screenshot.translatesAutoresizingMaskIntoConstraints = false
-			screenshot.layer.cornerRadius = 5
-			screenshot.layer.masksToBounds = true
-			screenshot.contentMode = .center
 			screenshot.isUserInteractionEnabled = false
-			self.screenshotContainer.addSubview(screenshot)
+			screenshotShadow.addSubview(screenshot)
 			
-			let centerXImage = screenshot.centerXAnchor.constraint(equalTo: self.screenshotContainer.centerXAnchor)
-			centerXImage.identifier = "centerX"
-			let centerYImage = screenshot.centerYAnchor.constraint(equalTo: self.screenshotContainer.centerYAnchor)
-			centerYImage.identifier = "centerY"
-			let widthImage = screenshot.widthAnchor.constraint(equalToConstant: screenShotFrame.width)
-			widthImage.identifier = "width"
-			let heightImage = screenshot.heightAnchor.constraint(equalToConstant: screenShotFrame.height)
-			heightImage.identifier = "height"
-			self.screenshotContainer.addConstraints([centerXImage, centerYImage, heightImage, widthImage])
+			let centerXImage = screenshot.centerXAnchor.constraint(equalTo: screenshotShadow.centerXAnchor)
+			let centerYImage = screenshot.centerYAnchor.constraint(equalTo: screenshotShadow.centerYAnchor)
+			let widthImage = screenshot.widthAnchor.constraint(equalToConstant: targetFrame.width)
+			let heightImage = screenshot.heightAnchor.constraint(equalToConstant: targetFrame.height)
+			screenshotShadow.addConstraints([centerXImage, centerYImage, heightImage, widthImage])
 		}
 	}
 	
@@ -981,7 +1034,7 @@ public class BubbleShowCase: UIView {
 			constraintBubbleForTopDirections()
 		case .left, .right:
 			contraintBubbleForSideDirections()
-		case .leftAndRight, .upAndDown:
+		case .leftAndRight, .upAndDown, .none:
 			constraintBubbleForDoubleDirections()
 		}
 	}
@@ -999,6 +1052,7 @@ public class BubbleShowCase: UIView {
 		} else {
 			let leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 2 * margins + safeAreaMargins.left)
 			addConstraint(leading)
+			bubbleLeading = leading
 		}
 	}
 	
@@ -1023,9 +1077,11 @@ public class BubbleShowCase: UIView {
 		} else {
 			if arrowDirection == .left {
 				let trailing = NSLayoutConstraint(item: bubble, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: -margins - safeAreaMargins.right)
+				bubbleTrailing = trailing
 				addConstraint(trailing)
 			} else {
 				let leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: margins + safeAreaMargins.left)
+				bubbleLeading = leading
 				addConstraint(leading)
 			}
 		}
@@ -1061,8 +1117,10 @@ public class BubbleShowCase: UIView {
 				centerX = nil
 				if leftAvailableSpace > rightAvailableSpace {
 					leading = NSLayoutConstraint(item: bubble, attribute: .trailing, relatedBy: .greaterThanOrEqual, toItem: self, attribute: .trailing, multiplier: 1, constant: -(margins + extraMargins))
+					bubbleTrailing = leading
 				} else {
 					leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: self, attribute: .leading, multiplier: 1, constant: margins + extraMargins)
+					bubbleLeading = leading
 				}
 			}
 			
@@ -1071,6 +1129,7 @@ public class BubbleShowCase: UIView {
 			addConstraint(width)
 		} else {
 			leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: margins + extraMargins)
+			bubbleLeading = leading
 			centerX = NSLayoutConstraint(item: bubble, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0)
 		}
 		

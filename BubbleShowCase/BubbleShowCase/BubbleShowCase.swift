@@ -54,7 +54,7 @@ This so called show case obscurs the scene, pops up above any other view in the 
 # Example #
 ````
 ...
-let showCase: BubbleShowCase! = BubbleShowCase(target: myBarButton)
+let showCase = BubbleShowCaseShow(target: myBarButton, label: "BarButtonShowCase")
 showCase.titleText = "You know what?"
 showCase.descriptionText = "You can do amazing things if you tap on this navbar button"
 showCase.image = UIImage(named: "show-case-bar-button")
@@ -171,6 +171,9 @@ public class BubbleShowCase: UIView {
 	*/
 	public var arrowDirection: ArrowDirection { didSet { setNeedsDisplay() } }
 	
+	/// It serves as the show case identifier
+	public private(set) var label: String?
+	
 	//MARK: Private properties
 	
 	/**************** SUBVIEWS ********************/
@@ -180,6 +183,7 @@ public class BubbleShowCase: UIView {
 	private var screenshotContainer: UIView!
 	private var bubble: UIView!
 	private var cross: UIButton!
+	private var arrow: UIView!
 	
 	/**************** GEOMETRY ********************/
 	private var imageSize = CGSize(width: 50, height: 50)
@@ -190,12 +194,24 @@ public class BubbleShowCase: UIView {
 	private var bubblePadding: UIEdgeInsets { return UIEdgeInsets(top: 15, left: 20, bottom: 15, right: 0) }
 	private var padding: CGFloat { return arrowSize }
 	private var margins: CGFloat = 10
+	private var safeAreaMargins: UIEdgeInsets {
+		if #available(iOS 11, *) {
+			return screenWindow.safeAreaInsets
+		} else {
+			return UIEdgeInsets.zero
+		}
+	}
 	
 	/*************** CONSTRAINTS ******************/
 	private var descriptionLeading: NSLayoutConstraint!
 	private var sideShowCaseCenterY: NSLayoutConstraint?
 	private var sideShowCaseTop: NSLayoutConstraint?
 	private var sideShowCaseBottom: NSLayoutConstraint?
+	
+	private var screenshotTop: NSLayoutConstraint!
+	private var screenshotHeight: NSLayoutConstraint!
+	private var screenshotWidth: NSLayoutConstraint!
+	private var screenshotLeading: NSLayoutConstraint!
 	
 	/****************** FLAGS *********************/
 	private var shouldWhitenScreenshot = false
@@ -205,9 +221,6 @@ public class BubbleShowCase: UIView {
 	private weak var target: UIView!
 	private weak var scrollView: UIScrollView?
 	private var screenWindow: UIWindow { return UIApplication.shared.keyWindow! }
-	
-	/******************* ID ***********************/
-	public private(set) var label: String?
 	
 	/***************** LAYERS *********************/
 	private var crossLayer: CAShapeLayer?
@@ -231,6 +244,8 @@ public class BubbleShowCase: UIView {
 		self.arrowDirection = arrowDirection
 		self.label = label
 		super.init(frame: CGRect.zero)
+		
+		setUp()
 	}
 	
 	/**
@@ -251,7 +266,9 @@ public class BubbleShowCase: UIView {
 		self.arrowDirection = .up
 		self.label = label
 		super.init(frame: CGRect.zero)
+		
 		shouldWhitenScreenshot = true
+		setUp()
 	}
 	
 	
@@ -277,7 +294,9 @@ public class BubbleShowCase: UIView {
 		self.arrowDirection = .down
 		self.label = label
 		super.init(frame: CGRect.zero)
+		
 		shouldWhitenScreenshot = true
+		setUp()
 	}
 	
 	/**
@@ -297,6 +316,8 @@ public class BubbleShowCase: UIView {
 		self.label = label
 		self.scrollView = cell.superview as? UIScrollView
 		super.init(frame: CGRect.zero)
+		
+		setUp()
 	}
 	
 	/**
@@ -316,6 +337,8 @@ public class BubbleShowCase: UIView {
 		self.label = label
 		self.scrollView = cell.superview as? UIScrollView
 		super.init(frame: CGRect.zero)
+		
+		setUp()
 	}
 	
 	/// **Not implemented**. It raises a *Fatal Exepction*.
@@ -324,6 +347,10 @@ public class BubbleShowCase: UIView {
 	}
 	
 	deinit {
+		screenshotTop = nil
+		screenshotHeight = nil
+		screenshotWidth = nil
+		screenshotLeading = nil
 		descriptionLeading = nil
 		sideShowCaseCenterY = nil
 		sideShowCaseTop = nil
@@ -362,6 +389,8 @@ public class BubbleShowCase: UIView {
 	//MARK: Override
 	
 	public override func draw(_ rect: CGRect) {
+		guard isInitialized else { return }
+		
 		if let _ = image, icon == nil {
 			embedImage()
 		}
@@ -434,8 +463,13 @@ public class BubbleShowCase: UIView {
 	
 	//MARK: Initialization
 	
+	// Common set up for the showcase
+	private func setUp() {
+		NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .UIDeviceOrientationDidChange, object: nil)
+	}
+	
 	// Initializes the show case hierarchy and displays the show case into the screen.
-	private func initialize() {
+	private func initialize(animated: Bool = true) {
 		isInitialized = true
 		self.isOpaque = false
 		
@@ -453,7 +487,13 @@ public class BubbleShowCase: UIView {
 		if isCrossDismissable { drawCross() }
 		drawArrow()
 		
-		animateAppearance()
+		if animated {
+			animateAppearance()
+		} else {
+			alpha = 1
+			screenshotContainer.alpha = 1
+			bubble.alpha = 1
+		}
 	}
 	
 	//MARK: Animations
@@ -501,6 +541,12 @@ public class BubbleShowCase: UIView {
 	
 	//MARK: Drawing
 	
+	private func redraw() {
+		takeScreenshot()
+		arrow.removeFromSuperview()
+		drawArrow()
+	}
+	
 	// Creates a button, draws a cross inside and places it at the top right of the bubble
 	private func drawCross() {
 		cross = UIButton()
@@ -536,7 +582,7 @@ public class BubbleShowCase: UIView {
 	
 	// Draws the arrow that the bubble will use to point to the target considering the direction specified.
 	private func drawArrow() {
-		let arrow = UIView()
+		arrow = UIView()
 		arrow.translatesAutoresizingMaskIntoConstraints = false
 		bubble.addSubview(arrow)
 		
@@ -605,12 +651,12 @@ public class BubbleShowCase: UIView {
 			path.addLine(to: CGPoint(x: arrowSize, y: arrowSize))
 		case .upAndDown:
 			let top = NSLayoutConstraint(item: arrow, attribute: .top, relatedBy: .equal, toItem: bubble, attribute: .top, multiplier: 1, constant: -arrowSize)
-			let leading = NSLayoutConstraint(item: arrow, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: targetFrame.midX - arrowSize)
+			let centerX = NSLayoutConstraint(item: arrow, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: -arrowSize)
 			let height = NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: arrowSize)
 			let width = NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 2 * arrowSize)
 			
 			bubble.addConstraint(top)
-			addConstraint(leading)
+			addConstraint(centerX)
 			arrow.addConstraints([width, height])
 			
 			path.move(to: CGPoint(x: arrowSize, y: 0))
@@ -624,12 +670,12 @@ public class BubbleShowCase: UIView {
 			bubble.addSubview(arrow2)
 			
 			let bottom2 = NSLayoutConstraint(item: arrow2, attribute: .bottom, relatedBy: .equal, toItem: bubble, attribute: .bottom, multiplier: 1, constant: arrowSize)
-			let leading2 = NSLayoutConstraint(item: arrow2, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: targetFrame.midX - arrowSize)
+			let centerX2 = NSLayoutConstraint(item: arrow2, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: -arrowSize)
 			let height2 = NSLayoutConstraint(item: arrow2, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: arrowSize)
 			let width2 = NSLayoutConstraint(item: arrow2, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 2 * arrowSize)
 			
 			bubble.addConstraint(bottom2)
-			addConstraint(leading2)
+			addConstraint(centerX2)
 			arrow2.addConstraints([width2, height2])
 			
 			path2.move(to: CGPoint(x: arrowSize, y: arrowSize))
@@ -637,13 +683,13 @@ public class BubbleShowCase: UIView {
 			path2.addLine(to: CGPoint(x: 2 * arrowSize, y:  0))
 			path2.addLine(to: CGPoint(x: arrowSize, y: arrowSize))
 		case .leftAndRight:
-			let top = NSLayoutConstraint(item: arrow, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: targetFrame.midY - arrowSize)
+			let centerY = NSLayoutConstraint(item: arrow, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -arrowSize)
 			let leading = NSLayoutConstraint(item: arrow, attribute: .leading, relatedBy: .equal, toItem: bubble, attribute: .leading, multiplier: 1, constant: -arrowSize)
 			let height = NSLayoutConstraint(item: arrow, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 2 * arrowSize)
 			let width = NSLayoutConstraint(item: arrow, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: arrowSize)
 			
 			bubble.addConstraint(leading)
-			addConstraint(top)
+			addConstraint(centerY)
 			arrow.addConstraints([width, height])
 			
 			path.move(to: CGPoint(x: 0, y: arrowSize))
@@ -656,13 +702,13 @@ public class BubbleShowCase: UIView {
 			arrow2.translatesAutoresizingMaskIntoConstraints = false
 			bubble.addSubview(arrow2)
 			
-			let top2 = NSLayoutConstraint(item: arrow2, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: targetFrame.midY - arrowSize)
+			let centerY2 = NSLayoutConstraint(item: arrow2, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -arrowSize)
 			let trailing2 = NSLayoutConstraint(item: arrow2, attribute: .trailing, relatedBy: .equal, toItem: bubble, attribute: .trailing, multiplier: 1, constant: arrowSize)
 			let height2 = NSLayoutConstraint(item: arrow2, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 2 * arrowSize)
 			let width2 = NSLayoutConstraint(item: arrow2, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: arrowSize)
 			
 			bubble.addConstraint(trailing2)
-			addConstraint(top2)
+			addConstraint(centerY2)
 			arrow2.addConstraints([width2, height2])
 			
 			path2.move(to: CGPoint(x: arrowSize, y: arrowSize))
@@ -776,6 +822,13 @@ public class BubbleShowCase: UIView {
 	
 	//MARK: Events
 	
+	@objc private func deviceDidRotate() {
+		guard isInitialized else { return }
+		DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) { [weak self] in		// Gives time to the screen to update
+			self?.redraw()
+		}
+	}
+	
 	// Screenshot was tapped
 	@objc private func targetDidTap(gestureRecognizer: UIGestureRecognizer) {
 		guard let tapGestureRecognizer = gestureRecognizer as? UITapGestureRecognizer else { return }
@@ -834,11 +887,39 @@ public class BubbleShowCase: UIView {
 		screenWindow.addConstraints([top, bottom, leading, trailing])
 	}
 	
-	// Takes a screenshot and places it over the target
+	// Embeds the screenshot in the show case
 	private func embedScreenshot() {
 		screenshotContainer = UIView()
 		screenshotContainer.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(screenshotContainer)
+		addGestureRecognizersToScreenshot()
+		
+		if let shadowColor = self.shadowColor {
+			screenshotContainer.layer.backgroundColor = UIColor.clear.cgColor
+			screenshotContainer.layer.shadowColor = shadowColor.cgColor
+			screenshotContainer.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+			screenshotContainer.layer.shadowOpacity = 0.5
+			screenshotContainer.layer.shadowRadius = 5.0
+		}
+		
+		screenshotTop = NSLayoutConstraint(item: screenshotContainer, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 0)
+		screenshotLeading = NSLayoutConstraint(item: screenshotContainer, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 0)
+		screenshotHeight = NSLayoutConstraint(item: screenshotContainer, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 0)
+		screenshotWidth = NSLayoutConstraint(item: screenshotContainer, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 0)
+		
+		screenshotContainer.addConstraints([screenshotHeight, screenshotWidth])
+		addConstraints([screenshotTop, screenshotLeading])
+		
+		takeScreenshot()
+	}
+	
+	// Takes a screenshot and places it over the target
+	private func takeScreenshot() {
+		guard screenshotContainer != nil else { return }
+		
+		for subview in screenshotContainer.subviews {
+			subview.removeFromSuperview()
+		}
 		
 		let navbarHeight = UIApplication.shared.keyWindow?.rootViewController?.navigationController?.navigationBar.frame.height ?? 44
 		let targetFrame = target.convert(target.bounds, to: screenWindow)
@@ -850,22 +931,10 @@ public class BubbleShowCase: UIView {
 									 height: navbarHeight)
 		}
 		
-		let top = NSLayoutConstraint(item: screenshotContainer, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: screenShotFrame.origin.y)
-		let leading = NSLayoutConstraint(item: screenshotContainer, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: screenShotFrame.origin.x)
-		let height = NSLayoutConstraint(item: screenshotContainer, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: screenShotFrame.height)
-		let width = NSLayoutConstraint(item: screenshotContainer, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: screenShotFrame.width)
-		
-		screenshotContainer.addConstraints([height, width])
-		addConstraints([top, leading])
-		
-		if let shadowColor = self.shadowColor {
-			screenshotContainer.layer.backgroundColor = UIColor.clear.cgColor
-			screenshotContainer.layer.shadowColor = shadowColor.cgColor
-			screenshotContainer.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
-			screenshotContainer.layer.shadowOpacity = 0.5
-			screenshotContainer.layer.shadowRadius = 5.0
-		}
-		addGestureRecognizersToScreenshot()
+		screenshotTop.constant = screenShotFrame.origin.y
+		screenshotLeading.constant = screenShotFrame.origin.x
+		screenshotHeight.constant = screenShotFrame.height
+		screenshotWidth.constant = screenShotFrame.width
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50)) { [weak self] in		// Takes the screenshot asynchronously while animating appearance
 			guard let `self` = self else { return }
@@ -894,7 +963,6 @@ public class BubbleShowCase: UIView {
 			heightImage.identifier = "height"
 			self.screenshotContainer.addConstraints([centerXImage, centerYImage, heightImage, widthImage])
 		}
-		
 	}
 	
 	// Embeds the bubble in the show case view and places it next to the target according to the arrow direction
@@ -929,7 +997,7 @@ public class BubbleShowCase: UIView {
 			let width = NSLayoutConstraint(item: bubble, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: maxSize)
 			addConstraint(width)
 		} else {
-			let leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 2 * margins)
+			let leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 2 * margins + safeAreaMargins.left)
 			addConstraint(leading)
 		}
 	}
@@ -954,10 +1022,10 @@ public class BubbleShowCase: UIView {
 			addConstraint(width)
 		} else {
 			if arrowDirection == .left {
-				let trailing = NSLayoutConstraint(item: bubble, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: -margins)
+				let trailing = NSLayoutConstraint(item: bubble, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: -margins - safeAreaMargins.right)
 				addConstraint(trailing)
 			} else {
-				let leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: margins)
+				let leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: margins + safeAreaMargins.left)
 				addConstraint(leading)
 			}
 		}
@@ -976,11 +1044,14 @@ public class BubbleShowCase: UIView {
 		
 		let leading: NSLayoutConstraint?
 		let centerX: NSLayoutConstraint?
+		
+		let extraMargins: CGFloat = safeAreaMargins.left
+		
 		if UIDevice.current.userInterfaceIdiom == .pad {
 			let screenWidth = UIScreen.main.bounds.width
 			let targetFrame = target.convert(target.bounds, to: UIApplication.shared.keyWindow!)
-			let leftAvailableSpace = targetFrame.midX
-			let rightAvailableSpace = screenWidth - targetFrame.midX
+			let leftAvailableSpace = targetFrame.midX - extraMargins
+			let rightAvailableSpace = screenWidth - targetFrame.midX - extraMargins
 			let maxSize: CGFloat = 420
 			
 			if rightAvailableSpace > maxSize / 2, leftAvailableSpace > maxSize / 2 {
@@ -989,9 +1060,9 @@ public class BubbleShowCase: UIView {
 			} else {
 				centerX = nil
 				if leftAvailableSpace > rightAvailableSpace {
-					leading = NSLayoutConstraint(item: bubble, attribute: .trailing, relatedBy: .greaterThanOrEqual, toItem: self, attribute: .trailing, multiplier: 1, constant: -margins)
+					leading = NSLayoutConstraint(item: bubble, attribute: .trailing, relatedBy: .greaterThanOrEqual, toItem: self, attribute: .trailing, multiplier: 1, constant: -(margins + extraMargins))
 				} else {
-					leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: self, attribute: .leading, multiplier: 1, constant: margins)
+					leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: self, attribute: .leading, multiplier: 1, constant: margins + extraMargins)
 				}
 			}
 			
@@ -999,7 +1070,7 @@ public class BubbleShowCase: UIView {
 			width.priority = .required
 			addConstraint(width)
 		} else {
-			leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: margins)
+			leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: margins + extraMargins)
 			centerX = NSLayoutConstraint(item: bubble, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0)
 		}
 		

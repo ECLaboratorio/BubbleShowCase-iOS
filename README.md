@@ -90,6 +90,10 @@ showCase.delegate = self
 showCase.titleFont = UIFont(name: "Roboto-Bold", size: 14)!
 showCase.descriptionFont = UIFont(name: "Roboto-Regular", size: 13)!
 
+showCase.showAnimationDuration = 0.2
+showCase.dismissAnimationDuration = 0.2
+showCase.flickerAnimationDuration = 0.2
+
 // Use this to force your users to tap or perform any other gesture over the target view
 showCase.isCrossDismissable = false	
 ```

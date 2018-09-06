@@ -1,16 +1,16 @@
 PODS:
-  - BubbleShowCase (0.0.5)
+  - BubbleShowCase (0.0.7-beta.1)
 
 DEPENDENCIES:
-  - BubbleShowCase
+  - BubbleShowCase (= 0.0.7-beta.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - BubbleShowCase
 
 SPEC CHECKSUMS:
-  BubbleShowCase: 850314ae22dc5bd6d88427cc3c02f0b7f01739d7
+  BubbleShowCase: 0f9277cb73b77eb98e65cb466053c5686b6c4c5b
 
-PODFILE CHECKSUM: c9f2160adbf20d26d642865800eac30cde2a746c
+PODFILE CHECKSUM: fbb6560b0b3ad62b646ac7013452b35b6176b78e
 
 COCOAPODS: 1.5.3

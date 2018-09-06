@@ -1,5 +1,8 @@
 Change Log
 ==========
+Version 0.0.7-beta.1
+---
+* Fixing issues with rotation
 
 Version 0.0.6
 ---

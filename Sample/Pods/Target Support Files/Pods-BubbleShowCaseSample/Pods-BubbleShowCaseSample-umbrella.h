@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_ShowCaseSampleVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_ShowCaseSampleVersionString[];
+FOUNDATION_EXPORT double Pods_BubbleShowCaseSampleVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_BubbleShowCaseSampleVersionString[];
 

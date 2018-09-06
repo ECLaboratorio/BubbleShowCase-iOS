@@ -15,9 +15,11 @@
 		B09C5427213946D80073610D /* DummyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B09C5425213946D80073610D /* DummyViewController.xib */; };
 		B09C542A213947990073610D /* ShowCaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09C5428213947990073610D /* ShowCaseViewController.swift */; };
 		B09C542B213947990073610D /* ShowCaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B09C5429213947990073610D /* ShowCaseViewController.xib */; };
+		BCABC0DC04A78AC38690DF51 /* Pods_BubbleShowCaseSample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB870501A0C7C4181BFB3703 /* Pods_BubbleShowCaseSample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2A36BDC4FC1384D80C9B08B8 /* Pods-BubbleShowCaseSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BubbleShowCaseSample.release.xcconfig"; path = "Pods/Target Support Files/Pods-BubbleShowCaseSample/Pods-BubbleShowCaseSample.release.xcconfig"; sourceTree = "<group>"; };
 		30B45FB9E59EF86D8BA1115C /* Pods-ShowCaseSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShowCaseSample.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShowCaseSample/Pods-ShowCaseSample.release.xcconfig"; sourceTree = "<group>"; };
 		5A024C2CD6571CA3B9901DE7 /* Pods-ShowCaseSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShowCaseSample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShowCaseSample/Pods-ShowCaseSample.debug.xcconfig"; sourceTree = "<group>"; };
 		A8973C21C19F887508C91975 /* Pods_ShowCaseSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShowCaseSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -30,6 +32,8 @@
 		B09C5425213946D80073610D /* DummyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DummyViewController.xib; sourceTree = "<group>"; };
 		B09C5428213947990073610D /* ShowCaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCaseViewController.swift; sourceTree = "<group>"; };
 		B09C5429213947990073610D /* ShowCaseViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ShowCaseViewController.xib; sourceTree = "<group>"; };
+		E7959694E30BE551C6724F05 /* Pods-BubbleShowCaseSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BubbleShowCaseSample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BubbleShowCaseSample/Pods-BubbleShowCaseSample.debug.xcconfig"; sourceTree = "<group>"; };
+		EB870501A0C7C4181BFB3703 /* Pods_BubbleShowCaseSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BubbleShowCaseSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A6BE95F0446954B09D6EC9E /* Pods_ShowCaseSample.framework in Frameworks */,
+				BCABC0DC04A78AC38690DF51 /* Pods_BubbleShowCaseSample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				A8973C21C19F887508C91975 /* Pods_ShowCaseSample.framework */,
+				EB870501A0C7C4181BFB3703 /* Pods_BubbleShowCaseSample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -90,6 +96,8 @@
 			children = (
 				5A024C2CD6571CA3B9901DE7 /* Pods-ShowCaseSample.debug.xcconfig */,
 				30B45FB9E59EF86D8BA1115C /* Pods-ShowCaseSample.release.xcconfig */,
+				E7959694E30BE551C6724F05 /* Pods-BubbleShowCaseSample.debug.xcconfig */,
+				2A36BDC4FC1384D80C9B08B8 /* Pods-BubbleShowCaseSample.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -175,7 +183,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ShowCaseSample-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-BubbleShowCaseSample-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -188,7 +196,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ShowCaseSample/Pods-ShowCaseSample-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-BubbleShowCaseSample/Pods-BubbleShowCaseSample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/BubbleShowCase/BubbleShowCase.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -197,7 +205,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ShowCaseSample/Pods-ShowCaseSample-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BubbleShowCaseSample/Pods-BubbleShowCaseSample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -343,7 +351,7 @@
 		};
 		B09C541E213942990073610D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5A024C2CD6571CA3B9901DE7 /* Pods-ShowCaseSample.debug.xcconfig */;
+			baseConfigurationReference = E7959694E30BE551C6724F05 /* Pods-BubbleShowCaseSample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -364,7 +372,7 @@
 		};
 		B09C541F213942990073610D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30B45FB9E59EF86D8BA1115C /* Pods-ShowCaseSample.release.xcconfig */;
+			baseConfigurationReference = 2A36BDC4FC1384D80C9B08B8 /* Pods-BubbleShowCaseSample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

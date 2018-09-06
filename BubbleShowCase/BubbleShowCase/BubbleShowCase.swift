@@ -68,13 +68,14 @@ showCase.show()
 public class BubbleShowCase: UIView {
 	
 	/**
-	It indicates the direction the show case should point to. There are 6 options:
+	It indicates the direction the show case should point to. There are 7 options:
 	- Left
 	- Right
 	- Up
 	- Down
 	- Up and Down
 	- Left and right
+	- None
 	*/
 	public enum ArrowDirection {
 		/// It points leftwards, making the show case stays on the right side of the target.
@@ -94,6 +95,9 @@ public class BubbleShowCase: UIView {
 		
 		/// It displays to arrows pointing leftwards and rightwards respectively. The show case pops up centered in the target.
 		case leftAndRight
+		
+		/// No arrow is displayed
+		case none
 	}
 	
 	//MARK: Public properties
@@ -157,6 +161,15 @@ public class BubbleShowCase: UIView {
 			setNeedsDisplay()
 		}
 	}
+	
+	/// Time in seconds that it takes to complete the entry animation
+	public var showAnimationDuration: Double = 0.4
+	
+	/// Time in seconds that it takes to complete the exit animation
+	public var dismissAnimationDuration: Double = 0.4
+	
+	/// Time in seconds that it takes to complete one screenshot flicker
+	public var flickerAnimationDuration: Double = 0.4
 	
 	/// Indicates wether or not the user can close the show case by tapping a cross that is displayed on the top right. Set this property to *false* this to force the user to perform any action on the target.
 	public var isCrossDismissable = true { didSet { cross?.isHidden = !isCrossDismissable } }
@@ -469,7 +482,7 @@ public class BubbleShowCase: UIView {
 	}
 	
 	// Initializes the show case hierarchy and displays the show case into the screen.
-	private func initialize(animated: Bool = true) {
+	private func initialize() {
 		isInitialized = true
 		self.isOpaque = false
 		
@@ -478,7 +491,7 @@ public class BubbleShowCase: UIView {
 		}
 		
 		embedInSuperView()
-		if arrowDirection != .leftAndRight && arrowDirection != .upAndDown {
+		if arrowDirection != .leftAndRight && arrowDirection != .upAndDown && arrowDirection != .none {
 			embedScreenshot()
 		}
 		
@@ -487,13 +500,7 @@ public class BubbleShowCase: UIView {
 		if isCrossDismissable { drawCross() }
 		drawArrow()
 		
-		if animated {
-			animateAppearance()
-		} else {
-			alpha = 1
-			screenshotContainer.alpha = 1
-			bubble.alpha = 1
-		}
+		animateAppearance()
 	}
 	
 	//MARK: Animations
@@ -502,7 +509,7 @@ public class BubbleShowCase: UIView {
 	private func animateDisappearance() {
 		delegate?.bubbleShowCaseWillDismiss?(self)
 		nextShowCase?.show()
-		UIView.animate(withDuration: 0.4, animations: { [weak self] in
+		UIView.animate(withDuration: dismissAnimationDuration, animations: { [weak self] in
 			self?.alpha = 0
 			}, completion: { [weak self] _ in
 				guard let `self` = self else { return }
@@ -518,7 +525,7 @@ public class BubbleShowCase: UIView {
 		bubble.alpha = 0
 		screenshotContainer?.alpha = 0
 		screenWindow.bringSubview(toFront: self)
-		UIView.animate(withDuration: 0.4, animations: { [weak self] in
+		UIView.animate(withDuration: showAnimationDuration, animations: { [weak self] in
 			self?.alpha = 1
 			self?.screenshotContainer?.alpha = 1
 			}, completion: { [weak self] _ in
@@ -526,12 +533,12 @@ public class BubbleShowCase: UIView {
 				self.bubble.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
 				self.bubble.alpha = 1
 				
-				UIView.animate(withDuration: 0.5, delay: 0.5, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: { [weak self] in
+				UIView.animate(withDuration: self.showAnimationDuration, delay: self.showAnimationDuration, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: [], animations: { [weak self] in
 					self?.bubble.transform = .identity
 					}, completion: { [weak self] _ in
 						guard let `self` = self else { return }
 						self.delegate?.bubbleShowCaseDidTransitionIntoScreen?(self)
-						UIView.animate(withDuration: 0.4, delay: 0, options: [.autoreverse, .repeat, .allowUserInteraction], animations: { [weak self] in
+						UIView.animate(withDuration: self.flickerAnimationDuration, delay: 0, options: [.autoreverse, .repeat, .allowUserInteraction], animations: { [weak self] in
 							self?.screenshotContainer?.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
 							}, completion: nil)
 				})
@@ -541,6 +548,7 @@ public class BubbleShowCase: UIView {
 	
 	//MARK: Drawing
 	
+	// Redraws those elements that are affected by some change in the screen bounds
 	private func redraw() {
 		takeScreenshot()
 		arrow.removeFromSuperview()
@@ -582,6 +590,8 @@ public class BubbleShowCase: UIView {
 	
 	// Draws the arrow that the bubble will use to point to the target considering the direction specified.
 	private func drawArrow() {
+		guard arrowDirection != .none else { return }
+		
 		arrow = UIView()
 		arrow.translatesAutoresizingMaskIntoConstraints = false
 		bubble.addSubview(arrow)
@@ -715,6 +725,8 @@ public class BubbleShowCase: UIView {
 			path2.addLine(to: CGPoint(x: 0, y: 0))
 			path2.addLine(to: CGPoint(x: 0, y:  2 * arrowSize))
 			path2.addLine(to: CGPoint(x: arrowSize, y: arrowSize))
+		case .none:
+			break
 		}
 		
 		let layer = CAShapeLayer()
@@ -981,7 +993,7 @@ public class BubbleShowCase: UIView {
 			constraintBubbleForTopDirections()
 		case .left, .right:
 			contraintBubbleForSideDirections()
-		case .leftAndRight, .upAndDown:
+		case .leftAndRight, .upAndDown, .none:
 			constraintBubbleForDoubleDirections()
 		}
 	}

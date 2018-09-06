@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,7 +24,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fWZ-VH-1XG">
-                    <rect key="frame" x="230" y="611" width="137" height="48"/>
+                    <rect key="frame" x="217" y="611" width="150" height="48"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                     <inset key="contentEdgeInsets" minX="15" minY="15" maxX="15" maxY="15"/>
                     <state key="normal" title="START DEMO">
@@ -44,7 +45,7 @@
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="3RR-4D-qAw" secondAttribute="trailing" constant="8" id="GV6-1D-anG"/>
                 <constraint firstItem="fWZ-VH-1XG" firstAttribute="trailing" secondItem="3RR-4D-qAw" secondAttribute="trailing" id="SRR-O4-yHq"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="fWZ-VH-1XG" secondAttribute="bottom" constant="8" id="c5T-JJ-S4f"/>
-                <constraint firstItem="fWZ-VH-1XG" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="230" id="c6p-Xs-XKa"/>
+                <constraint firstItem="fWZ-VH-1XG" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" multiplier="0.4" id="oSr-aP-rhq"/>
                 <constraint firstItem="3RR-4D-qAw" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="42" id="pck-aG-eq2"/>
                 <constraint firstItem="fWZ-VH-1XG" firstAttribute="top" secondItem="3RR-4D-qAw" secondAttribute="bottom" constant="32" id="ys8-7o-tfl"/>
             </constraints>

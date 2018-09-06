@@ -226,6 +226,9 @@ public class BubbleShowCase: UIView {
 	private var screenshotWidth: NSLayoutConstraint!
 	private var screenshotLeading: NSLayoutConstraint!
 	
+	private var bubbleLeading: NSLayoutConstraint?
+	private var bubbleTrailing: NSLayoutConstraint?
+	
 	/****************** FLAGS *********************/
 	private var shouldWhitenScreenshot = false
 	private var isInitialized = false
@@ -238,6 +241,10 @@ public class BubbleShowCase: UIView {
 	/***************** LAYERS *********************/
 	private var crossLayer: CAShapeLayer?
 	private var arrowLayers: [CAShapeLayer]?
+	
+	/************** ORIENTATION *******************/
+	private var currentOrientation: UIDeviceOrientation = .unknown
+	private var previousOrientation: UIDeviceOrientation = .unknown
 	
 	/***************** CONCAT *********************/
 	fileprivate var nextShowCase: BubbleShowCase?
@@ -360,6 +367,8 @@ public class BubbleShowCase: UIView {
 	}
 	
 	deinit {
+		bubbleLeading = nil
+		bubbleTrailing = nil
 		screenshotTop = nil
 		screenshotHeight = nil
 		screenshotWidth = nil
@@ -478,6 +487,8 @@ public class BubbleShowCase: UIView {
 	
 	// Common set up for the showcase
 	private func setUp() {
+		currentOrientation = UIDevice.current.orientation
+		previousOrientation = currentOrientation
 		NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: .UIDeviceOrientationDidChange, object: nil)
 	}
 	
@@ -553,6 +564,22 @@ public class BubbleShowCase: UIView {
 		takeScreenshot()
 		arrow.removeFromSuperview()
 		drawArrow()
+		
+		bubble.isHidden = false
+		screenshotContainer?.isHidden = false
+		
+		guard previousOrientation == .portrait || previousOrientation == .landscapeRight || previousOrientation == .landscapeLeft else { return }
+		
+		switch currentOrientation {
+		case .portrait:
+			bubbleLeading?.constant = (bubbleLeading?.constant ?? 0) - safeAreaMargins.top
+			bubbleTrailing?.constant = (bubbleTrailing?.constant ?? 0) + safeAreaMargins.top
+		case .landscapeLeft, .landscapeRight:
+			bubbleLeading?.constant = (bubbleLeading?.constant ?? 0) + safeAreaMargins.left
+			bubbleTrailing?.constant = (bubbleTrailing?.constant ?? 0) - safeAreaMargins.left
+		case .portraitUpsideDown, .faceUp, .faceDown, .unknown:
+			break
+		}
 	}
 	
 	// Creates a button, draws a cross inside and places it at the top right of the bubble
@@ -834,8 +861,17 @@ public class BubbleShowCase: UIView {
 	
 	//MARK: Events
 	
+	// Device was rotated
 	@objc private func deviceDidRotate() {
 		guard isInitialized else { return }
+		guard UIDevice.current.orientation != currentOrientation else { return }
+		
+		bubble.isHidden = true
+		screenshotContainer?.isHidden = true
+		
+		previousOrientation = currentOrientation
+		currentOrientation = UIDevice.current.orientation
+		
 		DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) { [weak self] in		// Gives time to the screen to update
 			self?.redraw()
 		}
@@ -1011,6 +1047,7 @@ public class BubbleShowCase: UIView {
 		} else {
 			let leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 2 * margins + safeAreaMargins.left)
 			addConstraint(leading)
+			bubbleLeading = leading
 		}
 	}
 	
@@ -1035,9 +1072,11 @@ public class BubbleShowCase: UIView {
 		} else {
 			if arrowDirection == .left {
 				let trailing = NSLayoutConstraint(item: bubble, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: -margins - safeAreaMargins.right)
+				bubbleTrailing = trailing
 				addConstraint(trailing)
 			} else {
 				let leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: margins + safeAreaMargins.left)
+				bubbleLeading = leading
 				addConstraint(leading)
 			}
 		}
@@ -1073,8 +1112,10 @@ public class BubbleShowCase: UIView {
 				centerX = nil
 				if leftAvailableSpace > rightAvailableSpace {
 					leading = NSLayoutConstraint(item: bubble, attribute: .trailing, relatedBy: .greaterThanOrEqual, toItem: self, attribute: .trailing, multiplier: 1, constant: -(margins + extraMargins))
+					bubbleTrailing = leading
 				} else {
 					leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: self, attribute: .leading, multiplier: 1, constant: margins + extraMargins)
+					bubbleLeading = leading
 				}
 			}
 			
@@ -1083,6 +1124,7 @@ public class BubbleShowCase: UIView {
 			addConstraint(width)
 		} else {
 			leading = NSLayoutConstraint(item: bubble, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: margins + extraMargins)
+			bubbleLeading = leading
 			centerX = NSLayoutConstraint(item: bubble, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0)
 		}
 		

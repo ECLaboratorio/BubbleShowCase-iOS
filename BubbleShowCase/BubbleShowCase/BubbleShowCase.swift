@@ -232,6 +232,7 @@ public class BubbleShowCase: UIView {
 	/****************** FLAGS *********************/
 	private var shouldWhitenScreenshot = false
 	private var isInitialized = false
+	private var isBarButton = false
 	
 	/************* ROOT HIERARCHY *****************/
 	private weak var target: UIView!
@@ -279,7 +280,7 @@ public class BubbleShowCase: UIView {
 	
 	*/
 	public init?(target: UIBarButtonItem, label: String? = nil) {
-		let targetViewUnwrapped = (target.value(forKey: "view") as? UIView) ?? target.customView
+		let targetViewUnwrapped = target.customView ?? (target.value(forKey: "view") as? UIView) 
 		guard let targetView = targetViewUnwrapped else { return nil }
 		
 		self.target = targetView
@@ -287,6 +288,7 @@ public class BubbleShowCase: UIView {
 		self.label = label
 		super.init(frame: CGRect.zero)
 		
+		isBarButton = true
 		shouldWhitenScreenshot = true
 		setUp()
 	}
@@ -965,18 +967,32 @@ public class BubbleShowCase: UIView {
 	private func takeScreenshot() {
 		guard screenshotContainer != nil else { return }
 		
-		for subview in screenshotContainer.subviews {
-			subview.removeFromSuperview()
-		}
+		screenshotContainer.subviews.forEach { $0.removeFromSuperview() }
 		
-		let navbarHeight = UIApplication.shared.keyWindow?.rootViewController?.navigationController?.navigationBar.frame.height ?? 44
+		let screenshotShadow = UIView()
+		screenshotShadow.backgroundColor = .clear
+		screenshotShadow.translatesAutoresizingMaskIntoConstraints = false
+		screenshotContainer.addSubview(screenshotShadow)
+		
+		let top = NSLayoutConstraint(item: screenshotShadow, attribute: .top, relatedBy: .equal, toItem: screenshotContainer, attribute: .top, multiplier: 1, constant: 0)
+		let leading = NSLayoutConstraint(item: screenshotShadow, attribute: .leading, relatedBy: .equal, toItem: screenshotContainer, attribute: .leading, multiplier: 1, constant: 0)
+		let trailing = NSLayoutConstraint(item: screenshotShadow, attribute: .trailing, relatedBy: .equal, toItem: screenshotContainer, attribute: .trailing, multiplier: 1, constant: 0)
+		let bottom = NSLayoutConstraint(item: screenshotShadow, attribute: .bottom, relatedBy: .equal, toItem: screenshotContainer, attribute: .bottom, multiplier: 1, constant: 0)
+		
+		screenshotContainer.addConstraints([top, leading, trailing, bottom])
+		
+		screenshotShadow.layer.cornerRadius = 5
+		screenshotShadow.layer.masksToBounds = true
+		screenshotShadow.backgroundColor =  self.shouldWhitenScreenshot ? .white : .clear
+		
+		let barHeight: CGFloat = isBarButton ? 44 : 49
 		let targetFrame = target.convert(target.bounds, to: screenWindow)
 		var screenShotFrame = targetFrame
 		if shouldWhitenScreenshot {
 			screenShotFrame = CGRect(x: targetFrame.origin.x - 4,
-									 y: targetFrame.origin.y - (navbarHeight - targetFrame.height) / 2,
+									 y: targetFrame.origin.y - (barHeight - targetFrame.height) / 2,
 									 width: targetFrame.width + 2 * 4,
-									 height: navbarHeight)
+									 height: barHeight)
 		}
 		
 		screenshotTop.constant = screenShotFrame.origin.y
@@ -990,26 +1006,15 @@ public class BubbleShowCase: UIView {
 			let parent: UIView! = self.target.superview ?? self.target
 			let screenshot: UIView! = parent.resizableSnapshotView(from: self.target.frame, afterScreenUpdates: false, withCapInsets: UIEdgeInsets.zero)
 			
-			if self.shouldWhitenScreenshot {
-				screenshot.backgroundColor = UIColor.white
-			}
-			
 			screenshot.translatesAutoresizingMaskIntoConstraints = false
-			screenshot.layer.cornerRadius = 5
-			screenshot.layer.masksToBounds = true
-			screenshot.contentMode = .center
 			screenshot.isUserInteractionEnabled = false
-			self.screenshotContainer.addSubview(screenshot)
+			screenshotShadow.addSubview(screenshot)
 			
-			let centerXImage = screenshot.centerXAnchor.constraint(equalTo: self.screenshotContainer.centerXAnchor)
-			centerXImage.identifier = "centerX"
-			let centerYImage = screenshot.centerYAnchor.constraint(equalTo: self.screenshotContainer.centerYAnchor)
-			centerYImage.identifier = "centerY"
-			let widthImage = screenshot.widthAnchor.constraint(equalToConstant: screenShotFrame.width)
-			widthImage.identifier = "width"
-			let heightImage = screenshot.heightAnchor.constraint(equalToConstant: screenShotFrame.height)
-			heightImage.identifier = "height"
-			self.screenshotContainer.addConstraints([centerXImage, centerYImage, heightImage, widthImage])
+			let centerXImage = screenshot.centerXAnchor.constraint(equalTo: screenshotShadow.centerXAnchor)
+			let centerYImage = screenshot.centerYAnchor.constraint(equalTo: screenshotShadow.centerYAnchor)
+			let widthImage = screenshot.widthAnchor.constraint(equalToConstant: targetFrame.width)
+			let heightImage = screenshot.heightAnchor.constraint(equalToConstant: targetFrame.height)
+			screenshotShadow.addConstraints([centerXImage, centerYImage, heightImage, widthImage])
 		}
 	}
 	

@@ -101,7 +101,7 @@ showCase.isCrossDismissable = false
 
 ### Concatenating show cases
 
-Do you need to show-case several features one after another? Tha's easy, you just have to call `concat(bubbleShowCase:)` or `show(after:)`. The former concatenates the argument as the next show case to show whereas the latter displays the show case after the argument:
+Do you need to show-case several features one after another? That's easy, you just have to call `concat(bubbleShowCase:)` or `show(after:)`. The former concatenates the argument as the next show case to show whereas the latter displays the show case after the argument:
 ```swift
 let firstShowCase = BubbleShowCase(...)
 let secondShowCase = BubbleShowCase(...)

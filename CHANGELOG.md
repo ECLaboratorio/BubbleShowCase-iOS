@@ -1,5 +1,9 @@
 Change Log
 ==========
+Version 0.0.7-beta.2
+---
+* Fixing target on navbar and tabbar for iOS 9 and 10
+
 Version 0.0.7-beta.1
 ---
 * Fixing issues with rotation

@@ -1,5 +1,9 @@
 Change Log
 ==========
+Version 1.0.0
+---
+* Releasing first version of the framework
+
 Version 0.0.7-beta.2
 ---
 * Fixing target on navbar and tabbar for iOS 9 and 10

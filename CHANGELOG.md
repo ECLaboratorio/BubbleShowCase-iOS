@@ -1,5 +1,9 @@
 Change Log
 ==========
+Version 1.1.0
+---
+* Migration to Swift 4.2
+
 Version 1.0.0
 ---
 * Releasing first version of the framework

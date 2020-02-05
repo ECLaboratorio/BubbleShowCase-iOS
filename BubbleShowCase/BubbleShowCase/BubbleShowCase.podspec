@@ -16,12 +16,12 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios
   s.ios.deployment_target  = '9.0'
-  s.swift_version = '4.2'
+  s.swift_version = '5.1'
 
   s.source       = { :git => "https://github.com/ECLaboratorio/BubbleShowCase-iOS.git", :tag => "#{s.version}" }
   s.source_files  = "BubbleShowCase/BubbleShowCase/*.swift"
 
-  s.xcconfig = { "SWIFT_VERSION" => "4.0" }
+  s.xcconfig = { "SWIFT_VERSION" => "5.1" }
   s.documentation_url = "https://github.com/ECLaboratorio/BubbleShowCase-iOS/blob/master/README.md"
 
 end

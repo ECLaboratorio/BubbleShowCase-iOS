@@ -462,6 +462,7 @@ public class BubbleShowCase: UIView {
     
     // Updates bubble top and bottom constraints to make fit the bubble into the screen. It should be called once the subviews have been rendered.
     private func updateSideConstraints() {
+        guard let bubble = bubble else { return }
         let topAvailableSpace = screenshotContainer.frame.midY - margins
         let bottomAvailableSpace = screenWindow.frame.height - screenshotContainer.frame.midY - margins
         if topAvailableSpace < bubble.frame.height / 2 {
@@ -598,12 +599,15 @@ public class BubbleShowCase: UIView {
             bubbleTrailing?.constant = (bubbleTrailing?.constant ?? 0) - safeAreaMargins.left
         case .portraitUpsideDown, .faceUp, .faceDown, .unknown:
             break
+        @unknown default:
+            break
         }
     }
     
     // Creates a button, draws a cross inside and places it at the top right of the bubble
     private func drawCross() {
-        cross = UIButton()
+        let cross = UIButton()
+        self.cross = cross
         cross.addTarget(self, action: #selector(crossDidTap), for: .touchUpInside)
         cross.translatesAutoresizingMaskIntoConstraints = false
         bubble.addSubview(cross)
@@ -638,7 +642,8 @@ public class BubbleShowCase: UIView {
     private func drawArrow() {
         guard arrowDirection != .none else { return }
         
-        arrow = UIView()
+        let arrow = UIView()
+        self.arrow = arrow
         arrow.translatesAutoresizingMaskIntoConstraints = false
         bubble.addSubview(arrow)
         
@@ -725,10 +730,10 @@ public class BubbleShowCase: UIView {
             arrow2.translatesAutoresizingMaskIntoConstraints = false
             bubble.addSubview(arrow2)
             
-            let bottom2 = NSLayoutConstraint(item: arrow2, attribute: .bottom, relatedBy: .equal, toItem: bubble, attribute: .bottom, multiplier: 1, constant: arrowSize)
-            let centerX2 = NSLayoutConstraint(item: arrow2, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: -arrowSize)
-            let height2 = NSLayoutConstraint(item: arrow2, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: arrowSize)
-            let width2 = NSLayoutConstraint(item: arrow2, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 2 * arrowSize)
+            let bottom2 = NSLayoutConstraint(item: arrow2!, attribute: .bottom, relatedBy: .equal, toItem: bubble, attribute: .bottom, multiplier: 1, constant: arrowSize)
+            let centerX2 = NSLayoutConstraint(item: arrow2!, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: -arrowSize)
+            let height2 = NSLayoutConstraint(item: arrow2!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: arrowSize)
+            let width2 = NSLayoutConstraint(item: arrow2!, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 2 * arrowSize)
             
             bubble.addConstraint(bottom2)
             addConstraint(centerX2)
@@ -758,10 +763,10 @@ public class BubbleShowCase: UIView {
             arrow2.translatesAutoresizingMaskIntoConstraints = false
             bubble.addSubview(arrow2)
             
-            let centerY2 = NSLayoutConstraint(item: arrow2, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -arrowSize)
-            let trailing2 = NSLayoutConstraint(item: arrow2, attribute: .trailing, relatedBy: .equal, toItem: bubble, attribute: .trailing, multiplier: 1, constant: arrowSize)
-            let height2 = NSLayoutConstraint(item: arrow2, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 2 * arrowSize)
-            let width2 = NSLayoutConstraint(item: arrow2, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: arrowSize)
+            let centerY2 = NSLayoutConstraint(item: arrow2!, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -arrowSize)
+            let trailing2 = NSLayoutConstraint(item: arrow2!, attribute: .trailing, relatedBy: .equal, toItem: bubble, attribute: .trailing, multiplier: 1, constant: arrowSize)
+            let height2 = NSLayoutConstraint(item: arrow2!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 2 * arrowSize)
+            let width2 = NSLayoutConstraint(item: arrow2!, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: arrowSize)
             
             bubble.addConstraint(trailing2)
             addConstraint(centerY2)
@@ -956,7 +961,8 @@ public class BubbleShowCase: UIView {
     
     // Embeds the screenshot in the show case
     private func embedScreenshot() {
-        screenshotContainer = UIView()
+        let screenshotContainer = UIView()
+        self.screenshotContainer = screenshotContainer
         screenshotContainer.translatesAutoresizingMaskIntoConstraints = false
         addSubview(screenshotContainer)
         addGestureRecognizersToScreenshot()
@@ -1037,7 +1043,8 @@ public class BubbleShowCase: UIView {
     
     // Embeds the bubble in the show case view and places it next to the target according to the arrow direction
     private func embedBubble() {
-        bubble = UIView()
+        let bubble = UIView()
+        self.bubble = bubble
         bubble.layer.cornerRadius = 5
         bubble.clipsToBounds = false
         bubble.translatesAutoresizingMaskIntoConstraints = false
@@ -1057,7 +1064,8 @@ public class BubbleShowCase: UIView {
     }
     
     private func embedSkipButton() {
-        skipLabel = UILabel()
+        let skipLabel = UILabel()
+        self.skipLabel = skipLabel
         skipLabel.textColor = UIColor.white
         skipLabel.text = skipButtonText
         skipLabel.textAlignment = .center
@@ -1079,7 +1087,6 @@ public class BubbleShowCase: UIView {
         
         addConstraint(centerX)
         addConstraint(bottom)
-        
     }
     
     private func addGestureRecognizerToSkipButton() {
@@ -1095,6 +1102,7 @@ public class BubbleShowCase: UIView {
     
     // Constraints the bubble to the target for both leftAndSide and upAndDown arrow directions
     private func constraintBubbleForDoubleDirections() {
+        guard let bubble = bubble else { return }
         let centerY = NSLayoutConstraint(item: bubble, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0)
         let centerX = NSLayoutConstraint(item: bubble, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0)
         addConstraints([centerY, centerX])
@@ -1112,6 +1120,7 @@ public class BubbleShowCase: UIView {
     
     // Constraints the bubble to the target for both left and right arrow directions
     private func contraintBubbleForSideDirections() {
+        guard let bubble = bubble else { return }
         let centerY = NSLayoutConstraint(item: bubble, attribute: .centerY, relatedBy: .equal, toItem: screenshotContainer, attribute: .centerY, multiplier: 1, constant: 0)
         addConstraint(centerY)
         sideShowCaseCenterY = centerY
@@ -1143,6 +1152,7 @@ public class BubbleShowCase: UIView {
     
     // Constraints the bubble to the target for both up and down arrow directions
     private func constraintBubbleForTopDirections() {
+        guard let bubble = bubble else { return }
         if arrowDirection == .up {
             let topConstant = margins + padding
             let top = NSLayoutConstraint(item: bubble, attribute: .top, relatedBy: .equal, toItem: screenshotContainer, attribute: .bottom, multiplier: 1, constant: topConstant)
@@ -1193,14 +1203,16 @@ public class BubbleShowCase: UIView {
     
     // Embeds both the title and description into the show case
     private func embedLabels() {
-        titleLabel = UILabel()
+        let titleLabel = UILabel()
+        self.titleLabel = titleLabel
         titleLabel.numberOfLines = 0
         titleLabel.text = titleText
         titleLabel.font = titleFont
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         bubble.addSubview(titleLabel)
         
-        descriptionLabel = UILabel()
+        let descriptionLabel = UILabel()
+        self.descriptionLabel = descriptionLabel
         descriptionLabel.numberOfLines = 0
         descriptionLabel.text = descriptionText
         descriptionLabel.font = descriptionFont
@@ -1222,20 +1234,21 @@ public class BubbleShowCase: UIView {
     
     // Embeds the icon in the show case, shifting the labels rightwards
     private func embedImage() {
-        icon = UIImageView(image: image)
-        icon?.translatesAutoresizingMaskIntoConstraints = false
-        bubble.addSubview(icon!)
+        let icon = UIImageView(image: image)
+        self.icon = icon
+        icon.translatesAutoresizingMaskIntoConstraints = false
+        bubble.addSubview(icon)
         
-        let height = NSLayoutConstraint(item: icon!, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: imageSize.height)
-        let width = NSLayoutConstraint(item: icon!, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: imageSize.width)
-        icon?.addConstraints([height, width])
+        let height = NSLayoutConstraint(item: icon, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: imageSize.height)
+        let width = NSLayoutConstraint(item: icon, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: imageSize.width)
+        icon.addConstraints([height, width])
         
-        let leading = NSLayoutConstraint(item: icon!, attribute: .leading, relatedBy: .equal, toItem: bubble, attribute: .leading, multiplier: 1, constant: bubblePadding.left)
-        let centerY = NSLayoutConstraint(item: icon!, attribute: .centerY, relatedBy: .equal, toItem: bubble, attribute: .centerY, multiplier: 1, constant: 0)
+        let leading = NSLayoutConstraint(item: icon, attribute: .leading, relatedBy: .equal, toItem: bubble, attribute: .leading, multiplier: 1, constant: bubblePadding.left)
+        let centerY = NSLayoutConstraint(item: icon, attribute: .centerY, relatedBy: .equal, toItem: bubble, attribute: .centerY, multiplier: 1, constant: 0)
         bubble.addConstraints([leading, centerY])
         
         bubble.removeConstraint(descriptionLeading)
-        descriptionLeading = NSLayoutConstraint(item: descriptionLabel, attribute: .leading, relatedBy: .equal, toItem: icon!, attribute: .trailing, multiplier: 1, constant: 15)
+        descriptionLeading = NSLayoutConstraint(item: descriptionLabel!, attribute: .leading, relatedBy: .equal, toItem: icon, attribute: .trailing, multiplier: 1, constant: 15)
         bubble.addConstraint(descriptionLeading)
     }
     

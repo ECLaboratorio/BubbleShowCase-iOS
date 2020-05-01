@@ -14,7 +14,7 @@ The delegate of BubbleShowCase must adopt the BubbleShowCaseDelegate protocol. O
 @objc public protocol BubbleShowCaseDelegate: class {
     
     /// Tells the delegate that the user wants to skip the whole thing
-    @objc optional func bubbleShowCaseWillSkipTutorial()
+    @objc optional func bubbleShowCaseDidSkipTutorial()
     
     /// Tells the delegate the show case is going to appear into the screen
     @objc optional func bubbleShowCaseWillTransitionIntoScreen(_ bubbleShowCase: BubbleShowCase)
@@ -136,13 +136,22 @@ public class BubbleShowCase: UIView {
     }
     
     
-    /// Text displayed as the show case title.
+    /// Text displayed as the show case Skip button.
     public var skipButtonText: String? {
         didSet {
             setNeedsLayout()
             setNeedsDisplay()
         }
     }
+    
+    /// Message for Skip confirmation dialog
+    public var skipConfirmMessage: String?;
+    
+    // Title for Yes button in skip confirmation dialog
+    public var skipConfirmYes: String?;
+    
+    // Title for No button in skip confirmation dialog
+    public var skipConfirmNo: String?;
     
     /// Font for the title label.
     public var titleFont: UIFont = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.bold) {
@@ -1112,7 +1121,28 @@ public class BubbleShowCase: UIView {
     
     @objc
     private func skipDidTap(gestureRecognizer: UITapGestureRecognizer) {
-        delegate?.bubbleShowCaseWillSkipTutorial?()
+        
+        if skipConfirmMessage != nil && skipConfirmNo != nil && skipConfirmYes != nil {
+            let alert = UIAlertController(title:"", message: skipConfirmMessage!, preferredStyle: UIAlertController.Style.alert);
+            
+            self.isHidden = true
+            alert.addAction(UIAlertAction(title: skipConfirmYes!, style: UIAlertAction.Style.default, handler: { action in
+                self.delegate?.bubbleShowCaseDidSkipTutorial?()
+                self.dismiss();
+            }))
+            alert.addAction(UIAlertAction(title: skipConfirmNo!, style: UIAlertAction.Style.cancel, handler: { action in
+                self.isHidden = false;
+            }))
+
+            self.window?.rootViewController?.present(alert, animated: true, completion:nil)
+
+        }
+        else { // no skip confirmation
+            self.delegate?.bubbleShowCaseDidSkipTutorial?()
+            self.dismiss();
+        }
+        
+    }
     }
     
     // Constraints the bubble to the target for both leftAndSide and upAndDown arrow directions

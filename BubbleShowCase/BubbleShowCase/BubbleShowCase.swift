@@ -171,6 +171,15 @@ public class BubbleShowCase: UIView {
         }
     }
     
+    /// Text displayed as the show case description.
+    public var attributedDescriptionText: NSAttributedString? {
+        didSet {
+            descriptionLabel?.attributedText = attributedDescriptionText
+            setNeedsLayout()
+            setNeedsDisplay()
+        }
+    }
+    
     /// screenshot container bckgroundcolor
     public var sreenshotContainerBackground: UIColor = UIColor.white
     
@@ -1214,8 +1223,14 @@ public class BubbleShowCase: UIView {
         let descriptionLabel = UILabel()
         self.descriptionLabel = descriptionLabel
         descriptionLabel.numberOfLines = 0
-        descriptionLabel.text = descriptionText
-        descriptionLabel.font = descriptionFont
+        if attributedDescriptionText != nil {
+            descriptionLabel.attributedText = attributedDescriptionText
+        }
+        else {
+            descriptionLabel.text = descriptionText
+            descriptionLabel.font = descriptionFont
+        }
+        
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         bubble.addSubview(descriptionLabel)
         

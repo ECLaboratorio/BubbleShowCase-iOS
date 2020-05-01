@@ -207,6 +207,12 @@ public class BubbleShowCase: UIView {
     /// The object that acts as the delegate of a Show Case. The delegate is not retained and is therefore qualified as *weak*.
     public weak var delegate: BubbleShowCaseDelegate?
     
+    /// Indicates wether or not the user can close the show case by tapping background
+    public var isBackgroundDismissable = true
+    
+    /// Indicates wether or not the user can close the show case by tapping the bubble
+    public var isBubbleDismissable = true
+    
     /**
     Direction of the arrow the show case points to. There are 6 possible values.
     
@@ -540,6 +546,9 @@ public class BubbleShowCase: UIView {
         if arrowDirection != .leftAndRight && arrowDirection != .upAndDown && arrowDirection != .none {
             embedScreenshot()
         }
+        else {
+            addGestureScreenshotRecognizers(view: self) // add recognizers to self
+        }
         
         embedBubble()
         
@@ -869,39 +878,39 @@ public class BubbleShowCase: UIView {
     }
     
     // Adds gestureRecognizers to the target screenshot to react to some gestures.
-    private func addGestureRecognizersToScreenshot() {
+    private func addGestureScreenshotRecognizers(view: UIView) {
         let longPressTapGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(targetDidLongPress))
         longPressTapGestureRecognizer.minimumPressDuration = 0.5
-        screenshotContainer.addGestureRecognizer(longPressTapGestureRecognizer)
+        view.addGestureRecognizer(longPressTapGestureRecognizer)
         
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(targetDidDoubleTap(gestureRecognizer:)))
         doubleTapGestureRecognizer.numberOfTapsRequired = 2
         doubleTapGestureRecognizer.require(toFail: longPressTapGestureRecognizer)
-        screenshotContainer.addGestureRecognizer(doubleTapGestureRecognizer)
+        view.addGestureRecognizer(doubleTapGestureRecognizer)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(targetDidTap(gestureRecognizer:)))
         tapGestureRecognizer.numberOfTapsRequired = 1
         tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
-        screenshotContainer.addGestureRecognizer(tapGestureRecognizer)
-        
+        view.addGestureRecognizer(tapGestureRecognizer)
+                
         let swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(targetDidSwipeLeft(gestureRecognizer:)))
         swipeLeftGestureRecognizer.direction = .left
-        screenshotContainer.addGestureRecognizer(swipeLeftGestureRecognizer)
+        view.addGestureRecognizer(swipeLeftGestureRecognizer)
         
         let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(targetDidSwipeRight(gestureRecognizer:)))
         swipeRightGestureRecognizer.direction = .right
         swipeRightGestureRecognizer.require(toFail: swipeLeftGestureRecognizer)
-        screenshotContainer.addGestureRecognizer(swipeRightGestureRecognizer)
+        view.addGestureRecognizer(swipeRightGestureRecognizer)
         
         let swipeUpGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(targetDidSwipeUp(gestureRecognizer:)))
         swipeUpGestureRecognizer.direction = .up
         swipeUpGestureRecognizer.require(toFail: swipeRightGestureRecognizer)
-        screenshotContainer.addGestureRecognizer(swipeUpGestureRecognizer)
+        view.addGestureRecognizer(swipeUpGestureRecognizer)
         
         let swipeDownGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(targetDidSwipeDown(gestureRecognizer:)))
         swipeDownGestureRecognizer.direction = .down
         swipeDownGestureRecognizer.require(toFail: swipeUpGestureRecognizer)
-        screenshotContainer.addGestureRecognizer(swipeDownGestureRecognizer)
+        view.addGestureRecognizer(swipeDownGestureRecognizer)
     }
     
     //MARK: Events
@@ -989,7 +998,7 @@ public class BubbleShowCase: UIView {
         self.screenshotContainer = screenshotContainer
         screenshotContainer.translatesAutoresizingMaskIntoConstraints = false
         addSubview(screenshotContainer)
-        addGestureRecognizersToScreenshot()
+        addGestureScreenshotRecognizers(view: screenshotContainer)
         
         if let shadowColor = self.shadowColor {
             screenshotContainer.layer.backgroundColor = UIColor.clear.cgColor
@@ -1077,6 +1086,8 @@ public class BubbleShowCase: UIView {
         let height = NSLayoutConstraint(item: bubble, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .height, multiplier: 1, constant: 50)
         bubble.addConstraint(height)
         
+        addGestureRecognizerToBubble()
+        
         switch arrowDirection {
         case .up, .down:
             constraintBubbleForTopDirections()
@@ -1119,6 +1130,24 @@ public class BubbleShowCase: UIView {
         skipLabel.addGestureRecognizer(tapGestureRecognizer)
     }
     
+    private func addGestureRecognizerToBubble(){
+        var tapGestureRecognizer : UITapGestureRecognizer?
+        if isBubbleDismissable {
+            tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(bubbleDidTap(gestureRecognizer:)))
+            tapGestureRecognizer!.numberOfTapsRequired = 1
+            bubble.addGestureRecognizer(tapGestureRecognizer!)
+        }
+        
+        if isBackgroundDismissable{
+            let backgroundTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(screenshotContainerDidTap(gestureRecognizer:)))
+            backgroundTapGestureRecognizer.numberOfTapsRequired = 1
+            if tapGestureRecognizer != nil {
+                backgroundTapGestureRecognizer.require(toFail: tapGestureRecognizer!)
+            }
+            self.addGestureRecognizer(backgroundTapGestureRecognizer)
+        }
+    }
+    
     @objc
     private func skipDidTap(gestureRecognizer: UITapGestureRecognizer) {
         
@@ -1143,7 +1172,20 @@ public class BubbleShowCase: UIView {
         }
         
     }
+    
+    @objc
+    private func bubbleDidTap(gestureRecognizer: UITapGestureRecognizer) {
+        self.delegate?.bubbleShowCase?(self, didTap: bubble, gestureRecognizer: gestureRecognizer)
+        dismiss();
     }
+
+    @objc
+    private func screenshotContainerDidTap(gestureRecognizer: UITapGestureRecognizer) {
+        self.delegate?.bubbleShowCase?(self, didTap: bubble, gestureRecognizer: gestureRecognizer)
+        dismiss();
+    }
+
+    
     
     // Constraints the bubble to the target for both leftAndSide and upAndDown arrow directions
     private func constraintBubbleForDoubleDirections() {

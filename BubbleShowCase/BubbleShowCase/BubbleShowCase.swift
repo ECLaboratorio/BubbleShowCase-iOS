@@ -14,7 +14,7 @@ The delegate of BubbleShowCase must adopt the BubbleShowCaseDelegate protocol. O
 @objc public protocol BubbleShowCaseDelegate: class {
     
     /// Tells the delegate that the user wants to skip the whole thing
-    @objc optional func bubbleShowCaseWillSkipTutorial()
+    @objc optional func bubbleShowCaseDidSkipTutorial()
     
     /// Tells the delegate the show case is going to appear into the screen
     @objc optional func bubbleShowCaseWillTransitionIntoScreen(_ bubbleShowCase: BubbleShowCase)
@@ -136,13 +136,22 @@ public class BubbleShowCase: UIView {
     }
     
     
-    /// Text displayed as the show case title.
+    /// Text displayed as the show case Skip button.
     public var skipButtonText: String? {
         didSet {
             setNeedsLayout()
             setNeedsDisplay()
         }
     }
+    
+    /// Message for Skip confirmation dialog
+    public var skipConfirmMessage: String?;
+    
+    // Title for Yes button in skip confirmation dialog
+    public var skipConfirmYes: String?;
+    
+    // Title for No button in skip confirmation dialog
+    public var skipConfirmNo: String?;
     
     /// Font for the title label.
     public var titleFont: UIFont = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.bold) {
@@ -171,6 +180,15 @@ public class BubbleShowCase: UIView {
         }
     }
     
+    /// Text displayed as the show case description.
+    public var attributedDescriptionText: NSAttributedString? {
+        didSet {
+            descriptionLabel?.attributedText = attributedDescriptionText
+            setNeedsLayout()
+            setNeedsDisplay()
+        }
+    }
+    
     /// screenshot container bckgroundcolor
     public var sreenshotContainerBackground: UIColor = UIColor.white
     
@@ -188,6 +206,12 @@ public class BubbleShowCase: UIView {
     
     /// The object that acts as the delegate of a Show Case. The delegate is not retained and is therefore qualified as *weak*.
     public weak var delegate: BubbleShowCaseDelegate?
+    
+    /// Indicates wether or not the user can close the show case by tapping background
+    public var isBackgroundDismissable = true
+    
+    /// Indicates wether or not the user can close the show case by tapping the bubble
+    public var isBubbleDismissable = true
     
     /**
     Direction of the arrow the show case points to. There are 6 possible values.
@@ -257,8 +281,8 @@ public class BubbleShowCase: UIView {
     private var arrowLayers: [CAShapeLayer]?
     
     /************** ORIENTATION *******************/
-    private var currentOrientation: UIDeviceOrientation = .unknown
-    private var previousOrientation: UIDeviceOrientation = .unknown
+    private var currentOrientation: UIInterfaceOrientation = .unknown
+    private var previousOrientation: UIInterfaceOrientation = .unknown
     
     /***************** CONCAT *********************/
     fileprivate var nextShowCase: BubbleShowCase?
@@ -504,7 +528,7 @@ public class BubbleShowCase: UIView {
     
     // Common set up for the showcase
     private func setUp() {
-        currentOrientation = UIDevice.current.orientation
+        currentOrientation = UIApplication.shared.statusBarOrientation
         previousOrientation = currentOrientation
         NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
@@ -521,6 +545,9 @@ public class BubbleShowCase: UIView {
         embedInSuperView()
         if arrowDirection != .leftAndRight && arrowDirection != .upAndDown && arrowDirection != .none {
             embedScreenshot()
+        }
+        else {
+            addGestureScreenshotRecognizers(view: self) // add recognizers to self
         }
         
         embedBubble()
@@ -582,7 +609,10 @@ public class BubbleShowCase: UIView {
     // Redraws those elements that are affected by some change in the screen bounds
     private func redraw() {
         takeScreenshot()
-        arrow.removeFromSuperview()
+        if (arrow != nil){
+            arrow.removeFromSuperview()
+        }
+        
         drawArrow()
         
         bubble.isHidden = false
@@ -848,39 +878,39 @@ public class BubbleShowCase: UIView {
     }
     
     // Adds gestureRecognizers to the target screenshot to react to some gestures.
-    private func addGestureRecognizersToScreenshot() {
+    private func addGestureScreenshotRecognizers(view: UIView) {
         let longPressTapGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(targetDidLongPress))
         longPressTapGestureRecognizer.minimumPressDuration = 0.5
-        screenshotContainer.addGestureRecognizer(longPressTapGestureRecognizer)
+        view.addGestureRecognizer(longPressTapGestureRecognizer)
         
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(targetDidDoubleTap(gestureRecognizer:)))
         doubleTapGestureRecognizer.numberOfTapsRequired = 2
         doubleTapGestureRecognizer.require(toFail: longPressTapGestureRecognizer)
-        screenshotContainer.addGestureRecognizer(doubleTapGestureRecognizer)
+        view.addGestureRecognizer(doubleTapGestureRecognizer)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(targetDidTap(gestureRecognizer:)))
         tapGestureRecognizer.numberOfTapsRequired = 1
         tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
-        screenshotContainer.addGestureRecognizer(tapGestureRecognizer)
-        
+        view.addGestureRecognizer(tapGestureRecognizer)
+                
         let swipeLeftGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(targetDidSwipeLeft(gestureRecognizer:)))
         swipeLeftGestureRecognizer.direction = .left
-        screenshotContainer.addGestureRecognizer(swipeLeftGestureRecognizer)
+        view.addGestureRecognizer(swipeLeftGestureRecognizer)
         
         let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(targetDidSwipeRight(gestureRecognizer:)))
         swipeRightGestureRecognizer.direction = .right
         swipeRightGestureRecognizer.require(toFail: swipeLeftGestureRecognizer)
-        screenshotContainer.addGestureRecognizer(swipeRightGestureRecognizer)
+        view.addGestureRecognizer(swipeRightGestureRecognizer)
         
         let swipeUpGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(targetDidSwipeUp(gestureRecognizer:)))
         swipeUpGestureRecognizer.direction = .up
         swipeUpGestureRecognizer.require(toFail: swipeRightGestureRecognizer)
-        screenshotContainer.addGestureRecognizer(swipeUpGestureRecognizer)
+        view.addGestureRecognizer(swipeUpGestureRecognizer)
         
         let swipeDownGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(targetDidSwipeDown(gestureRecognizer:)))
         swipeDownGestureRecognizer.direction = .down
         swipeDownGestureRecognizer.require(toFail: swipeUpGestureRecognizer)
-        screenshotContainer.addGestureRecognizer(swipeDownGestureRecognizer)
+        view.addGestureRecognizer(swipeDownGestureRecognizer)
     }
     
     //MARK: Events
@@ -888,13 +918,16 @@ public class BubbleShowCase: UIView {
     // Device was rotated
     @objc private func deviceDidRotate() {
         guard isInitialized else { return }
-        guard UIDevice.current.orientation != currentOrientation else { return }
+        
+        
+        
+        guard UIApplication.shared.statusBarOrientation != currentOrientation else { return }
         
         bubble.isHidden = true
         screenshotContainer?.isHidden = true
         
         previousOrientation = currentOrientation
-        currentOrientation = UIDevice.current.orientation
+        currentOrientation = UIApplication.shared.statusBarOrientation
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) { [weak self] in        // Gives time to the screen to update
             self?.redraw()
@@ -965,7 +998,7 @@ public class BubbleShowCase: UIView {
         self.screenshotContainer = screenshotContainer
         screenshotContainer.translatesAutoresizingMaskIntoConstraints = false
         addSubview(screenshotContainer)
-        addGestureRecognizersToScreenshot()
+        addGestureScreenshotRecognizers(view: screenshotContainer)
         
         if let shadowColor = self.shadowColor {
             screenshotContainer.layer.backgroundColor = UIColor.clear.cgColor
@@ -1053,6 +1086,8 @@ public class BubbleShowCase: UIView {
         let height = NSLayoutConstraint(item: bubble, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .height, multiplier: 1, constant: 50)
         bubble.addConstraint(height)
         
+        addGestureRecognizerToBubble()
+        
         switch arrowDirection {
         case .up, .down:
             constraintBubbleForTopDirections()
@@ -1095,10 +1130,62 @@ public class BubbleShowCase: UIView {
         skipLabel.addGestureRecognizer(tapGestureRecognizer)
     }
     
+    private func addGestureRecognizerToBubble(){
+        var tapGestureRecognizer : UITapGestureRecognizer?
+        if isBubbleDismissable {
+            tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(bubbleDidTap(gestureRecognizer:)))
+            tapGestureRecognizer!.numberOfTapsRequired = 1
+            bubble.addGestureRecognizer(tapGestureRecognizer!)
+        }
+        
+        if isBackgroundDismissable{
+            let backgroundTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(screenshotContainerDidTap(gestureRecognizer:)))
+            backgroundTapGestureRecognizer.numberOfTapsRequired = 1
+            if tapGestureRecognizer != nil {
+                backgroundTapGestureRecognizer.require(toFail: tapGestureRecognizer!)
+            }
+            self.addGestureRecognizer(backgroundTapGestureRecognizer)
+        }
+    }
+    
     @objc
     private func skipDidTap(gestureRecognizer: UITapGestureRecognizer) {
-        delegate?.bubbleShowCaseWillSkipTutorial?()
+        
+        if skipConfirmMessage != nil && skipConfirmNo != nil && skipConfirmYes != nil {
+            let alert = UIAlertController(title:"", message: skipConfirmMessage!, preferredStyle: UIAlertController.Style.alert);
+            
+            self.isHidden = true
+            alert.addAction(UIAlertAction(title: skipConfirmYes!, style: UIAlertAction.Style.default, handler: { action in
+                self.delegate?.bubbleShowCaseDidSkipTutorial?()
+                self.dismiss();
+            }))
+            alert.addAction(UIAlertAction(title: skipConfirmNo!, style: UIAlertAction.Style.cancel, handler: { action in
+                self.isHidden = false;
+            }))
+
+            self.window?.rootViewController?.present(alert, animated: true, completion:nil)
+
+        }
+        else { // no skip confirmation
+            self.delegate?.bubbleShowCaseDidSkipTutorial?()
+            self.dismiss();
+        }
+        
     }
+    
+    @objc
+    private func bubbleDidTap(gestureRecognizer: UITapGestureRecognizer) {
+        self.delegate?.bubbleShowCase?(self, didTap: bubble, gestureRecognizer: gestureRecognizer)
+        dismiss();
+    }
+
+    @objc
+    private func screenshotContainerDidTap(gestureRecognizer: UITapGestureRecognizer) {
+        self.delegate?.bubbleShowCase?(self, didTap: bubble, gestureRecognizer: gestureRecognizer)
+        dismiss();
+    }
+
+    
     
     // Constraints the bubble to the target for both leftAndSide and upAndDown arrow directions
     private func constraintBubbleForDoubleDirections() {
@@ -1214,8 +1301,14 @@ public class BubbleShowCase: UIView {
         let descriptionLabel = UILabel()
         self.descriptionLabel = descriptionLabel
         descriptionLabel.numberOfLines = 0
-        descriptionLabel.text = descriptionText
-        descriptionLabel.font = descriptionFont
+        if attributedDescriptionText != nil {
+            descriptionLabel.attributedText = attributedDescriptionText
+        }
+        else {
+            descriptionLabel.text = descriptionText
+            descriptionLabel.font = descriptionFont
+        }
+        
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         bubble.addSubview(descriptionLabel)
         

@@ -266,8 +266,8 @@ public class BubbleShowCase: UIView {
     private var arrowLayers: [CAShapeLayer]?
     
     /************** ORIENTATION *******************/
-    private var currentOrientation: UIDeviceOrientation = .unknown
-    private var previousOrientation: UIDeviceOrientation = .unknown
+    private var currentOrientation: UIInterfaceOrientation = .unknown
+    private var previousOrientation: UIInterfaceOrientation = .unknown
     
     /***************** CONCAT *********************/
     fileprivate var nextShowCase: BubbleShowCase?
@@ -513,7 +513,7 @@ public class BubbleShowCase: UIView {
     
     // Common set up for the showcase
     private func setUp() {
-        currentOrientation = UIDevice.current.orientation
+        currentOrientation = UIApplication.shared.statusBarOrientation
         previousOrientation = currentOrientation
         NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
@@ -591,7 +591,10 @@ public class BubbleShowCase: UIView {
     // Redraws those elements that are affected by some change in the screen bounds
     private func redraw() {
         takeScreenshot()
-        arrow.removeFromSuperview()
+        if (arrow != nil){
+            arrow.removeFromSuperview()
+        }
+        
         drawArrow()
         
         bubble.isHidden = false
@@ -897,13 +900,16 @@ public class BubbleShowCase: UIView {
     // Device was rotated
     @objc private func deviceDidRotate() {
         guard isInitialized else { return }
-        guard UIDevice.current.orientation != currentOrientation else { return }
+        
+        
+        
+        guard UIApplication.shared.statusBarOrientation != currentOrientation else { return }
         
         bubble.isHidden = true
         screenshotContainer?.isHidden = true
         
         previousOrientation = currentOrientation
-        currentOrientation = UIDevice.current.orientation
+        currentOrientation = UIApplication.shared.statusBarOrientation
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(400)) { [weak self] in        // Gives time to the screen to update
             self?.redraw()
